@@ -243,28 +243,6 @@
 
   footer { margin-top: 40px; text-align: center; }
   footer .brand { font-size: 22px; font-weight: bold; color: #000; }
-/* === Sticky narx banner (telefonlarda pastda yopishib turadi) === */
-#priceBanner {
-  position: sticky;
-  bottom: 12px;         /* pastdan masofa */
-  z-index: 1000;
-}
-
-/* telefonlarda yanada qulayroq ko‘rinish */
-@media (max-width: 600px) {
-  #priceBanner {
-    position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    margin-top: 0;
-  }
-
-  /* pastdagi banner footer ustiga chiqib ketmasligi uchun sahifaga joy beramiz */
-  body {
-    padding-bottom: 120px;
-  }
-}
 
   @media (max-width: 600px) {
     .row > div { flex: 1 1 100%; }
