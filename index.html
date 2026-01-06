@@ -160,7 +160,78 @@
     transform: scale(1.02);
   }
 
-  .modal {
+  
+
+  /* === Floating label (Material uslubida) === */
+  .f-field { margin-top: 10px; }
+  .float-btn{
+    position: relative;
+    min-height: 56px;
+    padding: 18px 44px 12px 14px;
+    line-height: 1.2;
+  }
+  .float-btn .float-label{
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    color: #6b7280;
+    font-size: 15px;
+    pointer-events: none;
+    transition: 0.18s ease;
+    background: transparent;
+  }
+  .float-btn .float-value{
+    display: block;
+    margin-top: 14px;
+    font-weight: 800;
+    color: #111;
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: 0.18s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .float-btn.filled{
+    border-color: #b7c6d1;
+  }
+  .float-btn.filled .float-label{
+    top: 8px;
+    transform: none;
+    font-size: 12px;
+    color: #5b6670;
+  }
+  .float-btn.filled .float-value{
+    opacity: 1;
+    transform: none;
+  }
+  .float-btn:focus-visible{
+    outline: 3px solid rgba(0,122,204,0.22);
+    outline-offset: 2px;
+  }
+  /* kichik "help" ikon (ixtiyoriy) */
+  .float-btn .help{
+    position:absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid #111;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight: 900;
+    font-size: 14px;
+    opacity: 0.65;
+    pointer-events:none;
+  }
+
+.modal {
     display: none; position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     background: rgba(0,0,0,0.4);
@@ -265,51 +336,68 @@
 
   <h2>KITOB NARXI KALKULATORI</h2>
 
-  <label for="tarif">Tarif:</label>
-  <button class="select-button" id="tarifBtn" onclick="showModal('tarif')" title="Tanlang">Tanlang</button>
-  <select id="tarif" onchange="korsatmaChiqar()" style="display:none;">
-    <option disabled selected value="">Tanlang</option>
-    <option>Standart</option>
-    <option>Optom</option>
-    <option>Maxsus</option>
-  </select>
+  <div class="f-field">
+    <button class="select-button float-btn" id="tarifBtn" type="button" onclick="showModal('tarif')" aria-label="Tarif tanlash">
+      <span class="float-label">Tarif * </span>
+      <span class="float-value" id="tarifValue"></span>
+      <span class="help">?</span>
+    </button>
+    <select id="tarif" onchange="korsatmaChiqar()" style="display:none;">
+      <option disabled selected value=""></option>
+      <option>Standart</option>
+      <option>Optom</option>
+      <option>Maxsus</option>
+    </select>
+  </div>
   <div id="izoh"></div>
 
   <div class="row">
     <div>
-      <label for="format">Format:</label>
-      <button class="select-button" id="formatBtn" onclick="showModal('format')" title="Tanlang">Tanlang</button>
-      <select id="format" style="display:none;">
-        <option disabled selected value="">Tanlang</option>
-        <option>A4</option>
-        <option>A5</option>
-        <option>B5</option>
-      </select>
+      <div class="f-field">
+        <button class="select-button float-btn" id="formatBtn" type="button" onclick="showModal('format')" aria-label="Format tanlash">
+          <span class="float-label">Format *</span>
+          <span class="float-value" id="formatValue"></span>
+        </button>
+        <select id="format" style="display:none;">
+          <option disabled selected value=""></option>
+          <option>A4</option>
+          <option>A5</option>
+          <option>B5</option>
+        </select>
+      </div>
     </div>
     <div>
-      <label for="muqova">Muqova:</label>
-      <button class="select-button" id="muqovaBtn" onclick="showModal('muqova')" title="Tanlang">Tanlang</button>
-      <select id="muqova" style="display:none;">
-        <option disabled selected value="">Tanlang</option>
-        <option>Qattiq muqovali</option>
-        <option>Yumshoq muqovali</option>
-        <option>Simli pereplyot</option>
-        <option>Plastik pereplyot</option>
-        <option>Oddiy muqovali</option>
-        <option>Muqovasiz</option>
-      </select>
+      <div class="f-field">
+        <button class="select-button float-btn" id="muqovaBtn" type="button" onclick="showModal('muqova')" aria-label="Muqova tanlash">
+          <span class="float-label">Muqova *</span>
+          <span class="float-value" id="muqovaValue"></span>
+        </button>
+        <select id="muqova" style="display:none;">
+          <option disabled selected value=""></option>
+          <option>Qattiq muqovali</option>
+          <option>Yumshoq muqovali</option>
+          <option>Simli pereplyot</option>
+          <option>Plastik pereplyot</option>
+          <option>Oddiy muqovali</option>
+          <option>Muqovasiz</option>
+        </select>
+      </div>
     </div>
   </div>
 
   <div class="row">
     <div>
-      <label for="rang">Rang:</label>
-      <button class="select-button" id="rangBtn" onclick="showModal('rang')" title="Tanlang">Tanlang</button>
-      <select id="rang" style="display:none;">
-        <option disabled selected value="">Tanlang</option>
-        <option>Oq qora</option>
-        <option>Rangli</option>
-      </select>
+      <div class="f-field">
+        <button class="select-button float-btn" id="rangBtn" type="button" onclick="showModal('rang')" aria-label="Rang tanlash">
+          <span class="float-label">Rang *</span>
+          <span class="float-value" id="rangValue"></span>
+        </button>
+        <select id="rang" style="display:none;">
+          <option disabled selected value=""></option>
+          <option>Oq qora</option>
+          <option>Rangli</option>
+        </select>
+      </div>
     </div>
     <div>
       <label for="sahifa">Sahifa soni:</label>
@@ -426,14 +514,14 @@
 
     // sahifa ogohlantirish + format o‘lchami
     let extra = "";
-    if (sahifa > 800) extra += "⚠️ Diqqat! Sahifa soni 800 tadan oshib ketdi. ";
+    if (sahifa > 900) extra += "⚠️ Diqqat! Sahifa soni 900 tadan oshib ketdi. ";
 
     if (format === "A4") extra += "Qog'oz o'lchami – 210×297 mm";
     else if (format === "A5") extra += "Qog'oz o'lchami – 148×210 mm";
     else if (format === "B5") extra += "Qog'oz o'lchami – 176×250 mm";
 
     qogozInfo.innerText = extra.trim();
-    if (sahifa > 800) document.getElementById('priceBanner').classList.add('warn');
+    if (sahifa > 900) document.getElementById('priceBanner').classList.add('warn');
   }
 
   // Modal helpers
@@ -442,7 +530,13 @@
   }
   function selectOption(type, value) {
     document.getElementById(type).value = value;
-    document.getElementById(type + 'Btn').innerText = value;
+
+    // tugma ichidagi qiymatni yozish (Tanlang yozuvi yo'q)
+    const btn = document.getElementById(type + 'Btn');
+    const valueEl = document.getElementById(type + 'Value');
+    if (valueEl) valueEl.textContent = value;
+    btn.classList.add('filled');
+
     document.getElementById(type + 'Modal').style.display = 'none';
     if (type === 'tarif') korsatmaChiqar();
     updatePrice(); // ✅ tanlov bo‘lganda darrov hisobla
@@ -466,6 +560,21 @@
   // Sahifa yozilganda (input) darrov hisobla
   document.addEventListener('DOMContentLoaded', () => {
     korsatmaChiqar();
+
+    // mavjud qiymat bo'lsa (reload bo'lganda ham) floating holatni tiklash
+    ['tarif','format','muqova','rang'].forEach(type => {
+      const sel = document.getElementById(type);
+      const val = sel.value;
+      const btn = document.getElementById(type + 'Btn');
+      const valueEl = document.getElementById(type + 'Value');
+      if (val) {
+        btn.classList.add('filled');
+        if (valueEl) valueEl.textContent = val;
+      } else {
+        btn.classList.remove('filled');
+        if (valueEl) valueEl.textContent = '';
+      }
+    });
 
     // sahifa input
     document.getElementById('sahifa').addEventListener('input', updatePrice);
