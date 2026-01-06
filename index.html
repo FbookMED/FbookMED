@@ -1,546 +1,567 @@
 <!DOCTYPE html>
-
 <html lang="uz">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Kitob narxi kalkulyatori</title>
 <style>
-    :root {
-      --primary-color: #007acc;
-      --hover-color: #005f99;
-      --font-color: white;
-      --shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+  :root {
+    --primary-color: #007acc;
+    --hover-color: #005f99;
+    --font-color: white;
+    --shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
 
-    * { box-sizing: border-box; }
+  * { box-sizing: border-box; }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f8fb;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f8fb;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
 
-    h2 {
-      text-align: center;
-      color: #333;
-      font-size: 26px;
-    }
+  h2 {
+    text-align: center;
+    color: #333;
+    font-size: 26px;
+  }
 
-    label {
-      font-weight: 600;
-      color: #333;
-      display: block;
-      margin-top: 10px;
-    }
+  label {
+    font-weight: 600;
+    color: #333;
+    display: block;
+    margin-top: 10px;
+  }
 
-    select, input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      font-size: 15px;
-    }
+  select, input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    font-size: 15px;
+  }
 
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
-    .row > div {
-      flex: 1 1 48%;
-    }
+  .row > div {
+    flex: 1 1 48%;
+  }
 
-    button {
-  margin-top: 10px;
-      padding: 12px;
-      width: 100%;
-      font-weight: bold;
-      background-color: var(--primary-color);
-      color: var(--font-color);
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
+  #izoh, #qogoz {
+    transition: all 0.3s ease-in-out;
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+  }
 
-    button:hover {
-      background-color: var(--hover-color);
-      transform: scale(1.02);
-    }
+  #izoh {
+    font-style: italic;
+    color: #777;
+    margin-bottom: 8px;
+  }
 
-    #natija, #izoh, #qogoz {
-  transition: all 0.5s ease-in-out;
-      margin-top: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
-    }
+  /* Yuqoridagi brend banner */
+  .banner {
+    background: linear-gradient(90deg, #007acc, #00c6ff);
+    color: white;
+    text-align: center;
+    padding: 25px 10px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow);
+  }
+  .banner-text span {
+    display: block;
+    font-size: 30px;
+    font-weight: bold;
+    animation: slide-in 3s infinite alternate;
+  }
+  .banner-text .sub {
+    font-size: 18px;
+    font-style: italic;
+  }
+  @keyframes slide-in {
+    from { transform: translateX(-30%); opacity: 0.2; }
+    to   { transform: translateX(30%);  opacity: 1; }
+  }
 
-    #izoh {
-      font-style: italic;
-      color: #777;
-    }
+  /* === NATIJA: banner/tugma ko‘rinishi === */
+  .price-banner {
+    margin-top: 14px;
+    padding: 14px 14px;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #007acc, #00c6ff);
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    user-select: none;
+  }
+  .price-banner .left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .price-banner .title {
+    font-weight: 900;
+    letter-spacing: 0.2px;
+    font-size: 14px;
+    opacity: 0.95;
+  }
+  .price-banner .hint {
+    font-size: 12px;
+    opacity: 0.9;
+  }
+  .price-banner .value {
+    font-size: 18px;
+    font-weight: 1000;
+    white-space: nowrap;
+  }
+  .price-banner.warn {
+    background: linear-gradient(90deg, #ff8f00, #ffca28);
+    color: #1f1f1f;
+  }
+  .price-banner.err {
+    background: linear-gradient(90deg, #e53935, #ff5252);
+  }
 
-    .banner {
-      background: linear-gradient(90deg, #007acc, #00c6ff);
-      color: white;
-      text-align: center;
-      padding: 25px 10px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: var(--shadow);
-    }
-
-    .banner-text span {
-      display: block;
-      font-size: 30px;
-      font-weight: bold;
-      animation: slide-in 3s infinite alternate;
-    }
-
-    .banner-text .sub {
-      font-size: 18px;
-      font-style: italic;
-    }
-
-    @keyframes slide-in {
-      from { transform: translateX(-30%); opacity: 0.2; }
-      to { transform: translateX(30%); opacity: 1; }
-    }
-
-    .contact-row {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .contact-banner {
-      display: flex;
-      align-items: center;
-      background-color: var(--primary-color);
-      color: white;
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-
-    .contact-banner img {
-      margin-right: 6px;
-      height: 18px;
-    }
-
-    .contact-banner:hover {
-      background-color: var(--hover-color);
-      transform: scale(1.05);
-    }
-
-    footer {
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    footer .brand {
-      font-size: 22px;
-      font-weight: bold;
-      color: #000;
-    }
-
-    @media (max-width: 600px) {
-      .row > div {
-        flex: 1 1 100%;
-      }
-    }
   @keyframes pulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.9; }
+    0% { transform: scale(1); opacity: 0.85; }
+    50% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.95; }
+  }
+
+  /* Modal Styles */
+  .select-button {
+    background: white; color: #333;
+    border: 1px solid #ccc;
+    width: 100%; text-align: left;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  .select-button:hover {
+    background-color: #eef6fc;
+    transform: scale(1.02);
+  }
+
+  .modal {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    justify-content: center; align-items: center;
+    z-index: 999;
+  }
+  .modal-content {
+    background: white; padding: 20px; border-radius: 12px;
+    animation: fadeInUp 0.3s ease; width: 80%; max-width: 300px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-content button {
+    display: block; width: 100%; margin-top: 10px;
+    background: #007acc; color: white;
+    border: none; font-weight: bold;
+    cursor: pointer; transition: 0.2s ease;
+    padding: 12px;
+    border-radius: 10px;
+  }
+  .modal-content button:hover {
+    background: #005f99; transform: scale(1.03);
+  }
+  @keyframes fadeInUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .scrolling-wrapper {
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 32px;
+    margin-top: 10px;
+  }
+  .scrolling-text {
+    font-size: 18px;
+    font-style: italic;
+    white-space: nowrap;
+    display: inline-block;
+    animation: scroll-left 10s linear 1;
+    padding-left: 100%;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+  .scrolling-text.telegram { color: #ffe600; }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(100%); opacity: 1; }
+    100% { transform: translateX(-100%); opacity: 1; }
+  }
+
+  .contact-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .contact-banner {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  .contact-banner img {
+    margin-right: 6px;
+    height: 18px;
+  }
+  .contact-banner:hover {
+    background-color: var(--hover-color);
+    transform: scale(1.05);
+  }
+
+  footer { margin-top: 40px; text-align: center; }
+  footer .brand { font-size: 22px; font-weight: bold; color: #000; }
+/* === Sticky narx banner (telefonlarda pastda yopishib turadi) === */
+#priceBanner {
+  position: sticky;
+  bottom: 12px;         /* pastdan masofa */
+  z-index: 1000;
 }
 
-/* Modal Styles */
-.select-button {
-  background: white; color: #333;
-  border: 1px solid #ccc;
-  width: 100%; text-align: left;
-}
-.modal {
-  display: none; position: fixed; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
-  justify-content: center; align-items: center;
-  z-index: 999;
-}
-.modal-content {
-  background: white; padding: 20px; border-radius: 12px;
-  animation: fadeInUp 0.3s ease; width: 80%; max-width: 300px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-}
-.modal-content button {
-  display: block; width: 100%; margin-top: 10px;
-  background: #007acc; color: white;
-  border: none; font-weight: bold;
-  cursor: pointer; transition: 0.2s ease;
-}
-.modal-content button:hover {
-  background: #005f99; transform: scale(1.03);
-}
-@keyframes fadeInUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* telefonlarda yanada qulayroq ko‘rinish */
+@media (max-width: 600px) {
+  #priceBanner {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    margin-top: 0;
+  }
+
+  /* pastdagi banner footer ustiga chiqib ketmasligi uchun sahifaga joy beramiz */
+  body {
+    padding-bottom: 120px;
+  }
 }
 
-
-body { opacity: 1; transition: none; }
-body.loaded { opacity: 1; }
-.select-button:hover {
-  background-color: #eef6fc;
-  transform: scale(1.02);
-}
-
-
-.scrolling-text {
-  margin-top: 10px;
-  font-size: 18px;
-  font-style: italic;
-  white-space: nowrap;
-  overflow: hidden;
-  animation: scroll-left 10s linear 1;
-}
-
-.scrolling-text.telegram {
-  color: #ffe600;
-}
-
-@keyframes scroll-left {
-  0% { transform: translateX(100%); opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 1; }
-  0% { transform: translateX(100%); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 0; }
-}
-
-.scrolling-wrapper {
-  max-width: 100%;
-  overflow: hidden;
-  position: relative;
-  height: 32px;
-  margin-top: 10px;
-}
-
-.scrolling-text {
-  font-size: 18px;
-  font-style: italic;
-  white-space: nowrap;
-  display: inline-block;
-  animation: scroll-left 10s linear 1;
-  padding-left: 100%;
-}
-
-.scrolling-text.telegram {
-  color: #ffe600;
-}
-
-@keyframes scroll-left {
-  0% { transform: translateX(100%); opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 1; }
-  0% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 1; }
-}
-
-.scrolling-wrapper {
-  max-width: 100%;
-  overflow: hidden;
-  position: relative;
-  height: 32px;
-  margin-top: 10px;
-}
-
-.scrolling-text {
-  font-size: 18px;
-  font-style: italic;
-  white-space: nowrap;
-  display: inline-block;
-  animation: scroll-left 10s linear 1;
-  padding-left: 100%;
-  opacity: 1;
-  transition: opacity 0.5s ease;
-}
-
-.scrolling-text.telegram {
-  color: #ffe600;
-}
-
-@keyframes scroll-left {
-  0% { transform: translateX(100%); opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 1; }
-  0% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 1; }
-}
-
-/* Modal responsiveness */
-.modal-content {
-  max-height: 80vh;
-  overflow-y: auto;
-}
+  @media (max-width: 600px) {
+    .row > div { flex: 1 1 100%; }
+    .price-banner { flex-direction: column; align-items: flex-start; }
+    .price-banner .value { align-self: flex-end; }
+  }
 </style>
 </head>
-<body onload="document.body.classList.add('loaded')">
-<div class="banner">
-<div class="banner-text">
-<span>FbookMED</span>
-<span class="sub">najot-ilmda</span>
-<div class="scrolling-wrapper"><div class="scrolling-text" id="scrollingText">Eng arzon va sifatli chop etish</div></div></div>
-</div>
-<h2>KITOB NARXI KALKULATORI</h2>
-<label for="tarif">Tarif:</label>
-<button aria-label="Tanlang" class="select-button" id="tarifBtn" onclick="showModal('tarif')" title="Tanlang">Tanlang</button>
-<select aria-label="Tanlov menyusi" id="tarif" onchange="korsatmaChiqar()" style="display:none;" title="Tanlov menyusi">
-<option disabled="" selected="" value="">Tanlang</option>
-<option>Standart</option>
-<option>Optom</option>
-<option>Maxsus</option>
-</select>
-<div id="izoh"></div>
-<div class="row">
-<div>
-<label for="format">Format:</label>
-<button aria-label="Tanlang" class="select-button" id="formatBtn" onclick="showModal('format')" title="Tanlang">Tanlang</button>
-<select aria-label="Tanlov menyusi" id="format" style="display:none;" title="Tanlov menyusi">
-<option disabled="" selected="" value="">Tanlang</option>
-<option>A4</option>
-<option>A5</option>
-<option>B5</option>
-</select>
-</div>
-<div>
-<label for="muqova">Muqova:</label>
-<button aria-label="Tanlang" class="select-button" id="muqovaBtn" onclick="showModal('muqova')" title="Tanlang">Tanlang</button>
-<select aria-label="Tanlov menyusi" id="muqova" style="display:none;" title="Tanlov menyusi">
-<option disabled="" selected="" value="">Tanlang</option>
-<option>Qattiq muqovali</option>
-<option>Yumshoq muqovali</option>
-<option>Oddiy muqovali</option>
-<option>Muqovasiz</option>
-</select>
-</div>
-</div>
-<div class="row">
-<div>
-<label for="rang">Rang:</label>
-<button aria-label="Tanlang" class="select-button" id="rangBtn" onclick="showModal('rang')" title="Tanlang">Tanlang</button>
-<select aria-label="Tanlov menyusi" id="rang" style="display:none;" title="Tanlov menyusi">
-<option disabled="" selected="" value="">Tanlang</option>
-<option>Oq qora</option>
-<option>Rangli</option>
-</select>
-</div>
-<div>
-<label for="sahifa">Sahifa soni:</label>
-<input id="sahifa" placeholder="Sahifa soni" type="number"/>
-</div>
-</div>
-<div id="qogoz"></div>
-<button aria-label="Hisoblash" onclick="hisoblaNarx()" title="Hisoblash">Hisoblash</button>
-<div id="natija"></div>
-<footer>
-<div class="brand">FbookMED</div>
-<div class="contact-row">
-<a class="contact-banner" href="tel:+998900152260">📞 +998900152260</a>
-<a class="contact-banner" href="https://t.me/FbookMED" target="_blank">
-<img alt="Telegram logotipi" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"/>FbookMED
+
+<body>
+  <div class="banner">
+    <div class="banner-text">
+      <span>FbookMED</span>
+      <span class="sub">najot-ilmda</span>
+      <div class="scrolling-wrapper">
+        <div class="scrolling-text" id="scrollingText">Eng arzon va sifatli chop etish</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>KITOB NARXI KALKULATORI</h2>
+
+  <label for="tarif">Tarif:</label>
+  <button class="select-button" id="tarifBtn" onclick="showModal('tarif')" title="Tanlang">Tanlang</button>
+  <select id="tarif" onchange="korsatmaChiqar()" style="display:none;">
+    <option disabled selected value="">Tanlang</option>
+    <option>Standart</option>
+    <option>Optom</option>
+    <option>Maxsus</option>
+  </select>
+  <div id="izoh"></div>
+
+  <div class="row">
+    <div>
+      <label for="format">Format:</label>
+      <button class="select-button" id="formatBtn" onclick="showModal('format')" title="Tanlang">Tanlang</button>
+      <select id="format" style="display:none;">
+        <option disabled selected value="">Tanlang</option>
+        <option>A4</option>
+        <option>A5</option>
+        <option>B5</option>
+      </select>
+    </div>
+    <div>
+      <label for="muqova">Muqova:</label>
+      <button class="select-button" id="muqovaBtn" onclick="showModal('muqova')" title="Tanlang">Tanlang</button>
+      <select id="muqova" style="display:none;">
+        <option disabled selected value="">Tanlang</option>
+        <option>Qattiq muqovali</option>
+        <option>Yumshoq muqovali</option>
+        <option>Simli pereplyot</option>
+        <option>Plastik pereplyot</option>
+        <option>Oddiy muqovali</option>
+        <option>Muqovasiz</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label for="rang">Rang:</label>
+      <button class="select-button" id="rangBtn" onclick="showModal('rang')" title="Tanlang">Tanlang</button>
+      <select id="rang" style="display:none;">
+        <option disabled selected value="">Tanlang</option>
+        <option>Oq qora</option>
+        <option>Rangli</option>
+      </select>
+    </div>
+    <div>
+      <label for="sahifa">Sahifa soni:</label>
+      <input id="sahifa" placeholder="Sahifa soni" type="number" min="1"/>
+    </div>
+  </div>
+
+  <div id="qogoz"></div>
+
+  <!-- Hisoblash tugmasi olib tashlandi, o‘rniga doimiy banner natija -->
+  <div id="priceBanner" class="price-banner">
+    <div class="left">
+      <div class="title">Narx avtomatik hisoblanadi</div>
+      <div class="hint">Maydonlarni to‘ldirsangiz natija chiqadi</div>
+    </div>
+    <div class="value" id="priceValue">—</div>
+  </div>
+
+  <footer>
+    <div class="brand">FbookMED</div>
+    <div class="contact-row">
+      <a class="contact-banner" href="tel:+998900152260">📞 +998900152260</a>
+      <a class="contact-banner" href="https://t.me/FbookMED" target="_blank">
+        <img alt="Telegram logotipi" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"/>FbookMED
       </a>
-<a class="contact-banner" href="https://t.me/FbookMED1" target="_blank">
-<img alt="Telegram logotipi" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"/>Admin
+      <a class="contact-banner" href="https://t.me/FbookMED1" target="_blank">
+        <img alt="Telegram logotipi" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"/>Admin
       </a>
-<a class="contact-banner" href="https://youtube.com/@fbookmed?feature=shared" target="_blank">
-<img alt="GitHub banner rasmi" src="https://repository-images.githubusercontent.com/324520492/ed8c1c80-47b4-11eb-8ddc-9b4ca1c3543d"/>YouTube
+      <a class="contact-banner" href="https://youtube.com/@fbookmed?feature=shared" target="_blank">
+        <img alt="YouTube" src="https://repository-images.githubusercontent.com/324520492/ed8c1c80-47b4-11eb-8ddc-9b4ca1c3543d"/>YouTube
       </a>
-<a class="contact-banner" href="https://uzum.uz/ru/shop/fbookmed" target="_blank">
-<img alt="Google Play ilova rasmi" src="https://play-lh.googleusercontent.com/rHQT7QaBJoQJeE9Ela8HKB_E2geP4IZ-JLvfdnE87ycnaBIZjeyVhRAr6XUz6xf1FMlV"/>Uzum Market
+      <a class="contact-banner" href="https://uzum.uz/ru/shop/fbookmed" target="_blank">
+        <img alt="Uzum" src="https://play-lh.googleusercontent.com/rHQT7QaBJoQJeE9Ela8HKB_E2geP4IZ-JLvfdnE87ycnaBIZjeyVhRAr6XUz6xf1FMlV"/>Uzum Market
       </a>
-</div>
-</footer>
+    </div>
+  </footer>
+
 <script>
-    const tarifNarxlar = {
-      "Standart": {
-        "A4": { "Oq qora": 180, "Rangli": 220, muqova: {"Qattiq muqovali": 40000, "Yumshoq muqovali": 20000, "Oddiy muqovali": 5000, "Muqovasiz": 0} },
-        "A5": { "Oq qora": 90,  "Rangli": 110, muqova: {"Qattiq muqovali": 20000, "Yumshoq muqovali": 10000, "Oddiy muqovali": 2000, "Muqovasiz": 0} },
-        "B5": { "Oq qora": 180, "Rangli": 220, muqova: {"Qattiq muqovali": 40000, "Yumshoq muqovali": 20000, "Oddiy muqovali": 3000, "Muqovasiz": 0} },
-      },
-      "Optom": {
-        "A4": { "Oq qora": 120, "Rangli": 120, muqova: {"Qattiq muqovali": 40000, "Yumshoq muqovali": 15000, "Oddiy muqovali": 2000, "Muqovasiz": 0} },
-        "A5": { "Oq qora": 60,  "Rangli": 60,  muqova: {"Qattiq muqovali": 20000, "Yumshoq muqovali": 10000, "Oddiy muqovali": 1000, "Muqovasiz": 0} },
-        "B5": { "Oq qora": 120, "Rangli": 120, muqova: {"Qattiq muqovali": 40000, "Yumshoq muqovali": 15000, "Oddiy muqovali": 2000, "Muqovasiz": 0} },
-      },
-      "Maxsus": {
-        "A4": { "Oq qora": 150, "Rangli": 150, muqova: {"Qattiq muqovali": 40000, "Yumshoq muqovali": 20000, "Oddiy muqovali": 5000, "Muqovasiz": 0} },
-        "A5": { "Oq qora": 75,  "Rangli": 75,  muqova: {"Qattiq muqovali": 20000, "Yumshoq muqovali": 10000, "Oddiy muqovali": 2000, "Muqovasiz": 0} },
-        "B5": { "Oq qora": 150, "Rangli": 150, muqova: {"Qattiq muqovali": 40000, "Yumshoq muqovali": 20000, "Oddiy muqovali": 3000, "Muqovasiz": 0} },
-      }
-    };
-
-    function korsatmaChiqar() {
-      const tarif = document.getElementById('tarif').value;
-      const izoh = document.getElementById('izoh');
-      if (tarif === "Optom") {
-        izoh.innerText = "💡 Minimal buyurtma 100 ta";
-      } else if (tarif === "Maxsus") {
-        izoh.innerText = "💼 Sotuvchilar uchun maxsus";
-      } else if (tarif === "Standart") {
-        izoh.innerText = "📚 Kam sonli buyurtma (donalik kitob)";
-      } else {
-        izoh.innerText = "";
-      }
+  const tarifNarxlar = {
+    "Standart": {
+      "A4": {"Oq qora": 180, "Rangli": 230, "muqova": {"Qattiq muqovali": 45000, "Yumshoq muqovali": 20000, "Simli pereplyot": 15000, "Plastik pereplyot": 10000, "Oddiy muqovali": 7000, "Muqovasiz": 0}},
+      "A5": {"Oq qora": 90,  "Rangli": 115, "muqova": {"Qattiq muqovali": 25000, "Yumshoq muqovali": 10000, "Simli pereplyot": 10000, "Plastik pereplyot": 8000,  "Oddiy muqovali": 4000, "Muqovasiz": 0}},
+      "B5": {"Oq qora": 180, "Rangli": 230, "muqova": {"Qattiq muqovali": 45000, "Yumshoq muqovali": 20000, "Simli pereplyot": 15000, "Plastik pereplyot": 10000, "Oddiy muqovali": 7000, "Muqovasiz": 0}}
+    },
+    "Maxsus": {
+      "A4": {"Oq qora": 150, "Rangli": 160, "muqova": {"Qattiq muqovali": 40000, "Yumshoq muqovali": 20000, "Simli pereplyot": 10000, "Plastik pereplyot": 8000,  "Oddiy muqovali": 5000, "Muqovasiz": 0}},
+      "A5": {"Oq qora": 75,  "Rangli": 80,  "muqova": {"Qattiq muqovali": 20000, "Yumshoq muqovali": 10000, "Simli pereplyot": 10000, "Plastik pereplyot": 8000,  "Oddiy muqovali": 3000, "Muqovasiz": 0}},
+      "B5": {"Oq qora": 150, "Rangli": 160, "muqova": {"Qattiq muqovali": 40000, "Yumshoq muqovali": 20000, "Simli pereplyot": 10000, "Plastik pereplyot": 8000,  "Oddiy muqovali": 5000, "Muqovasiz": 0}}
+    },
+    "Optom": {
+      "A4": {"Oq qora": 120, "Rangli": 140, "muqova": {"Qattiq muqovali": 40000, "Yumshoq muqovali": 15000, "Simli pereplyot": 8000,  "Plastik pereplyot": 8000,  "Oddiy muqovali": 3000, "Muqovasiz": 0}},
+      "A5": {"Oq qora": 60,  "Rangli": 70,  "muqova": {"Qattiq muqovali": 20000, "Yumshoq muqovali": 10000, "Simli pereplyot": 8000,  "Plastik pereplyot": 7000,  "Oddiy muqovali": 2000, "Muqovasiz": 0}},
+      "B5": {"Oq qora": 120, "Rangli": 140, "muqova": {"Qattiq muqovali": 40000, "Yumshoq muqovali": 15000, "Simli pereplyot": 8000,  "Plastik pereplyot": 8000,  "Oddiy muqovali": 3000, "Muqovasiz": 0}}
     }
+  };
 
-    function hisoblaNarx() {
-      const tarif = document.getElementById('tarif').value;
-      const format = document.getElementById('format').value;
-      const muqova = document.getElementById('muqova').value;
-      const rang = document.getElementById('rang').value;
-      const sahifa = parseInt(document.getElementById('sahifa').value);
-
-      const qogozInfo = document.getElementById('qogoz');
-
-      if (!tarif || !format || !muqova || !rang || isNaN(sahifa)) {
-        document.getElementById('natija').innerText = "Iltimos, barcha maydonlarni to‘ldiring!";
-        return;
-      }
-
-      const sahifaNarxi = tarifNarxlar[tarif][format][rang];
-      const muqovaNarxi = tarifNarxlar[tarif][format].muqova[muqova];
-      const jami = sahifa * sahifaNarxi + muqovaNarxi;
-
-      
-      const natijaElem = document.getElementById('natija');
-      natijaElem.innerText = `Umumiy narx: ${jami.toLocaleString()} so'm`;
-      natijaElem.style.animation = 'none';
-      void natijaElem.offsetWidth; // Trigger reflow
-
-['tarifBtn','formatBtn','muqovaBtn','rangBtn'].forEach(id => {
-  const btn = document.getElementById(id);
-  if (btn) {
-    btn.style.cursor = 'pointer';
-    btn.addEventListener('click', () => {
-      const type = id.replace('Btn', '');
-      document.getElementById(type + 'Modal').style.display = 'flex';
-    });
+  function korsatmaChiqar() {
+    const tarif = document.getElementById('tarif').value;
+    const izoh = document.getElementById('izoh');
+    if (tarif === "Optom") izoh.innerText = "💡 Minimal buyurtma 100 ta";
+    else if (tarif === "Maxsus") izoh.innerText = "💼 Minimal buyurtma 50 ta";
+    else if (tarif === "Standart") izoh.innerText = "📚 Kam sonli buyurtma (donalik kitob)";
+    else izoh.innerText = "";
   }
-});
 
-      natijaElem.style.animation = 'pulse 0.6s ease-in-out';
-    
+  function yaxlit1000(n) {
+    const rem = n % 1000;
+    if (rem === 0) return n;
+    return rem > 550 ? (n + (1000 - rem)) : (n - rem);
+  }
 
-      // sahifa ogohlantirish
-      if (sahifa > 800) {
-        qogozInfo.innerText = "⚠️ Diqqat! Sahifa soni 800 tadan oshib ketdi.";
-      } else {
-        qogozInfo.innerText = "";
-      }
+  function setBanner(state, valueText, hintText) {
+    const banner = document.getElementById('priceBanner');
+    const v = document.getElementById('priceValue');
+    banner.classList.remove('err', 'warn');
+    if (state) banner.classList.add(state);
+    v.textContent = valueText;
+    banner.querySelector('.hint').textContent = hintText;
 
-      // formatga mos o'lcham
-      if (format === "A4") {
-        qogozInfo.innerText += " Qog'oz o'lchami – 210x297 mm";
-      } else if (format === "A5") {
-        qogozInfo.innerText += " Qog'oz o'lchami – 148x210 mm";
-      } else if (format === "B5") {
-        qogozInfo.innerText += " Qog'oz o'lchami – 176x250 mm";
-      }
+    // kichik animatsiya
+    banner.style.animation = 'none';
+    void banner.offsetWidth;
+    banner.style.animation = 'pulse 0.35s ease-in-out';
+  }
+
+  function updatePrice() {
+    const tarif  = document.getElementById('tarif').value;
+    const format = document.getElementById('format').value;
+    const muqova = document.getElementById('muqova').value;
+    const rang   = document.getElementById('rang').value;
+    const sahifa = parseInt(document.getElementById('sahifa').value, 10);
+
+    const qogozInfo = document.getElementById('qogoz');
+    qogozInfo.innerText = "";
+
+    // Maydonlar to‘liqmas: bannerda ogohlantirish
+    if (!tarif || !format || !muqova || !rang || isNaN(sahifa) || sahifa <= 0) {
+      setBanner('err', '—', "Iltimos, barcha maydonlarni to‘ldiring!");
+      return;
     }
 
-    window.onload = function() {
-  korsatmaChiqar();
-  setTimeout(() => document.body.classList.add('loaded'), 100);
+    const sahifaNarxi = tarifNarxlar?.[tarif]?.[format]?.[rang];
+    const muqovaNarxi = tarifNarxlar?.[tarif]?.[format]?.muqova?.[muqova];
 
- };
-  
-function showModal(type) {
-  document.getElementById(type + 'Modal').style.display = 'flex';
-}
-function selectOption(type, value) {
-  document.getElementById(type).value = value;
-  document.getElementById(type + 'Btn').innerText = value;
-  document.getElementById(type + 'Modal').style.display = 'none';
-  if (type === 'tarif') korsatmaChiqar();
-}
-window.onclick = function(event) {
-  ['tarif','format','muqova','rang'].forEach(type => {
-    const modal = document.getElementById(type + 'Modal');
-    if (event.target === modal) {
-      modal.style.display = 'none';
+    if (typeof sahifaNarxi !== "number" || typeof muqovaNarxi !== "number") {
+      setBanner('err', '—', "Tanlovlarda mos narx topilmadi.");
+      return;
+    }
+
+    const jami = sahifa * sahifaNarxi + muqovaNarxi;
+    const jamiYaxlit = yaxlit1000(jami);
+
+    setBanner('', `${jamiYaxlit.toLocaleString()} so‘m`, "Natija doimiy yangilanadi");
+
+    // sahifa ogohlantirish + format o‘lchami
+    let extra = "";
+    if (sahifa > 800) extra += "⚠️ Diqqat! Sahifa soni 800 tadan oshib ketdi. ";
+
+    if (format === "A4") extra += "Qog'oz o'lchami – 210×297 mm";
+    else if (format === "A5") extra += "Qog'oz o'lchami – 148×210 mm";
+    else if (format === "B5") extra += "Qog'oz o'lchami – 176×250 mm";
+
+    qogozInfo.innerText = extra.trim();
+    if (sahifa > 800) document.getElementById('priceBanner').classList.add('warn');
+  }
+
+  // Modal helpers
+  function showModal(type) {
+    document.getElementById(type + 'Modal').style.display = 'flex';
+  }
+  function selectOption(type, value) {
+    document.getElementById(type).value = value;
+    document.getElementById(type + 'Btn').innerText = value;
+    document.getElementById(type + 'Modal').style.display = 'none';
+    if (type === 'tarif') korsatmaChiqar();
+    updatePrice(); // ✅ tanlov bo‘lganda darrov hisobla
+  }
+
+  // Modal tashqarisiga bosilsa yopilsin
+  window.onclick = function(event) {
+    ['tarif','format','muqova','rang'].forEach(type => {
+      const modal = document.getElementById(type + 'Modal');
+      if (event.target === modal) modal.style.display = 'none';
+    });
+  };
+
+  // ESC bosilsa modallar yopilsin
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
     }
   });
-}
+
+  // Sahifa yozilganda (input) darrov hisobla
+  document.addEventListener('DOMContentLoaded', () => {
+    korsatmaChiqar();
+
+    // sahifa input
+    document.getElementById('sahifa').addEventListener('input', updatePrice);
+
+    // fallback: agar selectlar ishlatilsa ham hisoblasin
+    ['tarif','format','muqova','rang'].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('change', () => {
+        if (id === 'tarif') korsatmaChiqar();
+        updatePrice();
+      });
+    });
+
+    // birinchi holat
+    updatePrice();
+  });
 
 </script>
+
 <!-- Modal Dialogs -->
 <div class="modal" id="tarifModal"><div class="modal-content">
-<button aria-label="Standart" onclick="selectOption('tarif','Standart')" title="Standart">Standart</button>
-<button aria-label="Optom" onclick="selectOption('tarif','Optom')" title="Optom">Optom</button>
-<button aria-label="Maxsus" onclick="selectOption('tarif','Maxsus')" title="Maxsus">Maxsus</button>
+  <button onclick="selectOption('tarif','Standart')">Standart</button>
+  <button onclick="selectOption('tarif','Optom')">Optom</button>
+  <button onclick="selectOption('tarif','Maxsus')">Maxsus</button>
 </div></div>
+
 <div class="modal" id="formatModal"><div class="modal-content">
-<button aria-label="A4" onclick="selectOption('format','A4')" title="A4">A4</button>
-<button aria-label="A5" onclick="selectOption('format','A5')" title="A5">A5</button>
-<button aria-label="B5" onclick="selectOption('format','B5')" title="B5">B5</button>
+  <button onclick="selectOption('format','A4')">A4</button>
+  <button onclick="selectOption('format','A5')">A5</button>
+  <button onclick="selectOption('format','B5')">B5</button>
 </div></div>
+
 <div class="modal" id="muqovaModal"><div class="modal-content">
-<button aria-label="Qattiq muqovali" onclick="selectOption('muqova','Qattiq muqovali')" title="Qattiq muqovali">Qattiq muqovali</button>
-<button aria-label="Yumshoq muqovali" onclick="selectOption('muqova','Yumshoq muqovali')" title="Yumshoq muqovali">Yumshoq muqovali</button>
-<button aria-label="Oddiy muqovali" onclick="selectOption('muqova','Oddiy muqovali')" title="Oddiy muqovali">Oddiy muqovali</button>
-<button aria-label="Muqovasiz" onclick="selectOption('muqova','Muqovasiz')" title="Muqovasiz">Muqovasiz</button>
+  <button onclick="selectOption('muqova','Qattiq muqovali')">Qattiq muqovali</button>
+  <button onclick="selectOption('muqova','Yumshoq muqovali')">Yumshoq muqovali</button>
+  <button onclick="selectOption('muqova','Simli pereplyot')">Simli pereplyot</button>
+  <button onclick="selectOption('muqova','Plastik pereplyot')">Plastik pereplyot</button>
+  <button onclick="selectOption('muqova','Oddiy muqovali')">Oddiy muqovali</button>
+  <button onclick="selectOption('muqova','Muqovasiz')">Muqovasiz</button>
 </div></div>
+
 <div class="modal" id="rangModal"><div class="modal-content">
-<button aria-label="Oq qora" onclick="selectOption('rang','Oq qora')" title="Oq qora">Oq qora</button>
-<button aria-label="Rangli" onclick="selectOption('rang','Rangli')" title="Rangli">Rangli</button>
+  <button onclick="selectOption('rang','Oq qora')">Oq qora</button>
+  <button onclick="selectOption('rang','Rangli')">Rangli</button>
 </div></div>
+
 <script>
-const messages = [
-  { text: "Eng arzon va sifatli chop etish", class: "", isLink: false },
-  { text: "Telegram orqali buyurtma bering", class: "telegram", isLink: true, href: "https://t.me/FbookMED1" }
-];
+  const messages = [
+    { text: "Eng arzon va sifatli chop etish", class: "", isLink: false },
+    { text: "Telegram orqali buyurtma bering", class: "telegram", isLink: true, href: "https://t.me/FbookMED1" }
+  ];
+  let msgIndex = 0;
 
-let msgIndex = 0;
+  function rotateScrollingText() {
+    msgIndex = (msgIndex + 1) % messages.length;
+    const current = messages[msgIndex];
+    const oldElem = document.getElementById("scrollingText");
+    const newElem = document.createElement(current.isLink ? "a" : "div");
 
-function rotateScrollingText() {
-  msgIndex = (msgIndex + 1) % messages.length;
-  const current = messages[msgIndex];
-  const oldElem = document.getElementById("scrollingText");
-  const newElem = document.createElement(current.isLink ? "a" : "div");
+    newElem.id = "scrollingText";
+    newElem.className = "scrolling-text " + (current.class || "");
+    newElem.textContent = current.text;
 
-  newElem.id = "scrollingText";
-  newElem.className = "scrolling-text " + (current.class || "");
-  newElem.textContent = current.text;
-
-  if (current.isLink) {
-    newElem.href = current.href;
-    newElem.target = "_blank";
+    if (current.isLink) {
+      newElem.href = current.href;
+      newElem.target = "_blank";
+      newElem.style.textDecoration = "none";
+      newElem.style.color = "inherit";
+      newElem.style.fontWeight = "800";
+    }
+    oldElem.replaceWith(newElem);
   }
+  setInterval(rotateScrollingText, 10000);
+</script>
 
-  oldElem.replaceWith(newElem);
-}
-
-setInterval(rotateScrollingText, 10000);
-</script><script>
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal').forEach(modal => {
-      modal.style.display = 'none';
-    });
-  }
-});
-</script></body>
+</body>
 </html>
