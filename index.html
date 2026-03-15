@@ -3,7 +3,12 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Kitob narxi kalkulyatori</title>
+<title>Kitob narxi kalkulyatori | FbookMED</title>
+<meta name="description" content="Kitob chop etish nar xini oson va tezkor hisoblang. FbookMED onlayn kalkulyatori.">
+<!-- Telegram/WhatsApp Card structure -->
+<meta property="og:title" content="Kitob narxi kalkulyatori | FbookMED">
+<meta property="og:description" content="Kitob chop etish nar xini oson, silliq va tezkor hisoblovchi aqlli onlayn dastur.">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="style.css?v=13">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -232,7 +237,7 @@
     </div>
     <div class="basket-actions">
       <button class="action-btn telegram-btn" onclick="sendBasketToTelegram()" id="basketOrderBtn" style="display:none;display:flex;align-items:center;justify-content:center;gap:8px;">
-        <img alt="Telegram logotipi" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" style="height:20px;width:20px;"/> Buyurtma berish
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.565 8.161l-1.921 9.043c-.14.629-.513.784-1.037.49l-2.923-2.155-1.411 1.357c-.156.156-.289.289-.59.289l.21-2.977 5.418-4.897c.235-.211-.051-.326-.366-.118l-6.69 4.214-2.887-.902c-.628-.195-.64-.629.13-.93l11.282-4.352c.523-.195.98.118.729.753z"/></svg> Buyurtma berish
       </button>
       <button class="clear-basket-btn" onclick="clearFullBasket()" id="clearBasketBtn" style="display:none;">
         🗑️ Savatni bo'shatish
@@ -247,13 +252,13 @@
     <div class="contact-row">
       <a class="contact-banner" href="tel:+998900152260">📞 +998900152260</a>
       <a class="contact-banner" href="https://t.me/FbookMED" target="_blank">
-        <img alt="Telegram logotipi" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"/>FbookMED
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.565 8.161l-1.921 9.043c-.14.629-.513.784-1.037.49l-2.923-2.155-1.411 1.357c-.156.156-.289.289-.59.289l.21-2.977 5.418-4.897c.235-.211-.051-.326-.366-.118l-6.69 4.214-2.887-.902c-.628-.195-.64-.629.13-.93l11.282-4.352c.523-.195.98.118.729.753z"/></svg>FbookMED
       </a>
       <a class="contact-banner" href="https://t.me/FbookMED1" target="_blank">
-        <img alt="Telegram logotipi" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"/>Admin
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.565 8.161l-1.921 9.043c-.14.629-.513.784-1.037.49l-2.923-2.155-1.411 1.357c-.156.156-.289.289-.59.289l.21-2.977 5.418-4.897c.235-.211-.051-.326-.366-.118l-6.69 4.214-2.887-.902c-.628-.195-.64-.629.13-.93l11.282-4.352c.523-.195.98.118.729.753z"/></svg>Admin
       </a>
       <a class="contact-banner" href="https://youtube.com/@fbookmed?feature=shared" target="_blank">
-        <img alt="YouTube" src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" style="height:18px;width:18px;"/>YouTube
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#FF0000"><path d="M19.615 3.184c-1.183-.312-7.615-.312-7.615-.312s-6.433 0-7.615.312c-1.185.312-2.115 1.242-2.427 2.427-.312 1.183-.312 3.652-.312 3.652s0 2.469.312 3.652c.312 1.185 1.242 2.115 2.427 2.427 1.182.312 7.615.312 7.615.312s6.432 0 7.615-.312c1.185-.312 2.115-1.242 2.427-2.427.312-1.183.312-3.652.312-3.652s0-2.469-.312-3.652c-.312-1.185-1.242-2.115-2.427-2.427zm-11.615 11.816v-6l5 3-5 3z"/></svg>YouTube
       </a>
       <a class="contact-banner" href="https://uzum.uz/ru/shop/fbookmed" target="_blank">
         <img alt="Uzum" src="https://play-lh.googleusercontent.com/rHQT7QaBJoQJeE9Ela8HKB_E2geP4IZ-JLvfdnE87ycnaBIZjeyVhRAr6XUz6xf1FMlV"/>Uzum Market
@@ -289,6 +294,19 @@
     </div>
   </div>
 </div>
+
+<!-- Alert Modal (Custom Ogohlantirish) -->
+<div class="modal" id="alertModal">
+  <div class="modal-overlay" onclick="closeAlert()"></div>
+  <div class="modal-content">
+    <div class="modal-header" style="color:var(--text-color);">⚠️ Diqqat</div>
+    <p style="text-align:center;margin:15px 0;font-size:15px;color:var(--text-color);line-height:1.5;" id="alertText">Iltimos, avval barcha maydonlarni to'ldiring!</p>
+    <div style="display:flex;justify-content:center;">
+       <button onclick="closeAlert()" style="margin-top:10px;background:rgba(0,0,0,0.05);color:var(--text-color);width:100% !important;">Tushunarli</button>
+    </div>
+  </div>
+</div>
+
 
 <div class="modal" id="tarifModal"><div class="modal-content">
   <div class="modal-header">Tarifni tanlang</div>

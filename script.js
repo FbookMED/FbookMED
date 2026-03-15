@@ -48,7 +48,7 @@ function addToBasket() {
   triggerHaptic();
   const res = updatePrice();
   if (!res) {
-    alert("Iltimos, avval barcha maydonlarni to'ldiring!");
+    showAlert("Iltimos, avval barcha maydonlarni to'ldiring!");
     return;
   }
 
@@ -495,12 +495,12 @@ function updatePrice() {
   const qismArea = document.querySelector('.qism-select-area');
   if (qismArea) {
     if (muqova === "Muqovasiz") {
-      qismArea.style.display = 'none';
+      qismArea.classList.add('hidden');
       if (qismSoniInput) qismSoniInput.value = "1";
       const qismDisplay = document.getElementById('qismSoniDisplay');
       if (qismDisplay) qismDisplay.textContent = "1";
     } else {
-      qismArea.style.display = 'flex';
+      qismArea.classList.remove('hidden');
     }
   }
 
@@ -662,7 +662,7 @@ async function saveAsImage() {
 }
 
 window.onclick = function(event) {
-  ['tarif','format','muqova','rang','confirm','phone'].forEach(type => {
+  ['tarif','format','muqova','rang','confirm','phone','alert'].forEach(type => {
     const modal = document.getElementById(type + 'Modal');
     if (modal && event.target === modal) modal.style.display = 'none';
   });
@@ -678,6 +678,18 @@ window.onclick = function(event) {
     basketModal.style.display = 'none';
   }
 };
+
+function showAlert(message) {
+  const textEl = document.getElementById('alertText');
+  if (textEl) textEl.textContent = message;
+  const modal = document.getElementById('alertModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeAlert() {
+  const modal = document.getElementById('alertModal');
+  if (modal) modal.style.display = 'none';
+}
 
 function submitPhone() {
   const input = document.getElementById('promptPhone');

@@ -1013,11 +1013,11 @@ footer .brand {
   box-shadow: var(--shadow);
   transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.contact-banner img {
-  height: 18px;
-  width: 18px;
+.contact-banner img, .contact-banner svg {
+  height: 20px !important;
+  width: 20px !important;
   object-fit: contain;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .contact-banner:hover {
   background: var(--primary-color);
@@ -1035,9 +1035,96 @@ footer .brand {
   .price-banner .value { font-size: 26px; }
   body { padding: 14px 12px; }
   .container { padding: 20px 16px; }
-  .muqova-wrapper { flex-direction: column; align-items: stretch; height: auto !important; }
-  .qism-select-area { border-left: none; border-top: 1px solid var(--glass-border); padding: 10px; }
+  .muqova-wrapper { 
+    flex-direction: row !important; 
+    align-items: center !important; 
+    background: var(--input-bg) !important;
+    border: 1.5px solid var(--glass-border) !important;
+    border-radius: 14px !important;
+    padding: 0 4px 0 0 !important; 
+    justify-content: space-between !important;
+    height: 54px !important; 
+    margin-top: 14px !important;
+  }
+  .muqova-main-btn {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    flex: 1 !important;
+    position: relative !important; /* Absolute elementlarni ichiga qulflash (Bug FIX) */
+    height: 100% !important;
+    padding: 0 !important;
+  }
+  .muqova-main-btn:active {
+    transform: none !important;
+  }
+  
+  /* Absolute Offsets (Sticker va Overlap 100% tuzatish) */
+  .muqova-main-btn .btn-icon {
+    position: absolute !important;
+    left: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 16px !important;
+    margin: 0 !important;
+  }
+  .muqova-main-btn .float-label {
+    position: absolute !important;
+    left: 44px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 15px !important;
+    color: var(--subtext-color) !important;
+    transition: all 0.18s ease !important;
+  }
+  .muqova-main-btn.filled .float-label {
+    top: 8px !important;
+    transform: none !important;
+    font-size: 11px !important;
+    color: var(--primary-color) !important;
+  }
+  .muqova-main-btn .float-value {
+    position: absolute !important;
+    left: 44px !important;
+    top: 25px !important; /* Label dan keyingi silliq joy */
+    margin: 0 !important;
+    font-size: 15px !important;
+    opacity: 1 !important;
+  }
+
+  .qism-select-area { 
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 10px !important;
+    padding: 4px 10px !important; 
+    width: fit-content !important;
+    margin: 0 !important; 
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    background: rgba(0, 122, 204, 0.04) !important; 
+    height: 36px !important;
+    align-self: center !important; /* Vertikal o'rtaga qulflash */
+  }
+
+
+
+  .qism-title {
+    font-size: 13px !important;
+    text-transform: none !important; /* Qism holatida capital emas */
+    color: var(--text-color) !important;
+    font-weight: 600 !important;
+  }
+  .qism-title::after {
+    content: ":";
+  }
+  .qism-current-val {
+    font-size: 16px !important;
+    color: var(--text-color) !important;
+  }
   .qism-grid { grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .qism-select-area.hidden { display: none !important; }
 
   /* --- Yangi Mobil Dizayn --- */
 
