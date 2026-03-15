@@ -1059,19 +1059,19 @@ footer .brand {
   }
 
   /* Modallardagi tugmalarni 2-ta ustunga joylash (Grid) */
-  .modal:not(#historyModal):not(#basketModal) .modal-content {
+  .modal:not(#historyModal):not(#basketModal):not(#phoneModal) .modal-content {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
     align-content: start !important;
   }
   /* Header sarlavhasi to'liq uzunlik bo'lishi uchun */
-  .modal:not(#historyModal):not(#basketModal) .modal-header {
+  .modal:not(#historyModal):not(#basketModal):not(#phoneModal) .modal-header {
     grid-column: 1 / -1 !important;
     margin-bottom: 8px !important;
   }
   /* Tugmalarni silliqlash */
-  .modal:not(#historyModal):not(#basketModal) .modal-content button {
+  .modal:not(#historyModal):not(#basketModal):not(#phoneModal) .modal-content button {
     margin-top: 0 !important;
     height: 48px !important;
     display: flex !important;
