@@ -56,6 +56,7 @@ function addToBasket() {
   basket.push(item);
   localStorage.setItem('calcBasket', JSON.stringify(basket));
   updateBasketBadge();
+  showToast("✅ Savatga qo'shildi!");
 
   // Button feedback
   const btn = document.getElementById('addBasketBtn');
@@ -110,13 +111,13 @@ function removeFromBasket(id) {
 }
 
 function clearFullBasket() {
-  if (confirm("Savatdagi barcha kitoblarni o'chirib tashlaysizmi?")) {
+  showConfirmModal("Savatdagi barcha kitoblarni o'chirib tashlaysizmi? <br><small style='font-size:12px;opacity:0.75;'>(Ushbu amalni ortga qaytarib bo'lmaydi)</small>", () => {
     basket = [];
     localStorage.removeItem('calcBasket');
     renderBasket();
     updateBasketBadge();
     document.getElementById('basketModal').style.display = 'none';
-  }
+  });
 }
 
 function showBasketModal() {
@@ -386,19 +387,52 @@ function animateNumber(element, target) {
   requestAnimationFrame(updateCount);
 }
 
+function isCalculatorDirty() {
+  const ids = ['tarif', 'format', 'muqova', 'rang'];
+  for (let id of ids) {
+    const el = document.getElementById(id);
+    if (el && el.value !== "") return true;
+  }
+  const sahifa = document.getElementById('sahifa');
+  if (sahifa && sahifa.value !== "") return true;
+
+  const kitobNomi = document.getElementById('kitobNomi');
+  if (kitobNomi && kitobNomi.value !== "") return true;
+
+  const kitobSoni = document.getElementById('kitobSoni');
+  if (kitobSoni && kitobSoni.value !== "1") return true;
+
+  const qismSoni = document.getElementById('qismSoni');
+  if (qismSoni && qismSoni.value !== "1") return true;
+
+  return false;
+}
+
 function resetCalculator() {
+  if (!isCalculatorDirty()) return; // Forma bo'sh bo'lsa hech narsa qilmaydi
+
   if (basket.length === 0) {
     doResetCalculator();
   } else {
-    showModal('confirm');
+    showConfirmModal("Hozirgi hisob-kitoblarni tozalaysizmi? <br><small style='font-size:12px;opacity:0.75;'>(Savatdagi kitoblar saqlanib qoladi)</small>", doResetCalculator);
   }
 }
 
-function confirmReset(approved) {
+let currentConfirmAction = null;
+
+function showConfirmModal(text, onApprove) {
+  const modal = document.getElementById('confirmModal');
+  const textEl = document.getElementById('confirmText');
+  if (textEl) textEl.innerHTML = text;
+  if (modal) modal.style.display = 'flex';
+  currentConfirmAction = onApprove;
+}
+
+function confirmDecision(approved) {
   const modal = document.getElementById('confirmModal');
   if (modal) modal.style.display = 'none';
-  if (approved) {
-    doResetCalculator();
+  if (approved && currentConfirmAction) {
+    currentConfirmAction();
   }
 }
 
@@ -435,6 +469,7 @@ function doResetCalculator() {
   if (kitobNomi) kitobNomi.value = "";
 
   updatePrice();
+  showToast("🔄 Tozalandi");
 }
 
 
@@ -494,7 +529,7 @@ function updatePrice() {
 
   const qismArea = document.querySelector('.qism-select-area');
   if (qismArea) {
-    if (muqova === "Muqovasiz") {
+    if (!muqova || muqova === "Muqovasiz") {
       qismArea.classList.add('hidden');
       if (qismSoniInput) qismSoniInput.value = "1";
       const qismDisplay = document.getElementById('qismSoniDisplay');
@@ -857,3 +892,23 @@ function rotateScrollingText() {
   oldElem.replaceWith(newElem);
 }
 setInterval(rotateScrollingText, 10000);
+
+function showToast(message, duration = 2500) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = message;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+      if (toast.parentNode === container) {
+        container.removeChild(toast);
+      }
+    }, 300);
+  }, duration);
+}

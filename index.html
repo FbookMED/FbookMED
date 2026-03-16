@@ -18,6 +18,7 @@
 
 <body>
   <!-- Background Glow Ornaments -->
+  <div class="toast-container" id="toastContainer"></div>
   <div class="glow-bg">
     <div class="glow-circle glow-1"></div>
     <div class="glow-circle glow-2"></div>
@@ -270,10 +271,10 @@
 <div class="modal" id="confirmModal">
   <div class="modal-content">
     <div class="modal-header" style="color:var(--text-color);">Tasdiqlash 🤔</div>
-    <p style="text-align:center;margin-bottom:24px;font-size:15px;color:var(--text-color);line-height:1.5;">Hozirgi hisob-kitoblarni tozalaysizmi? <br><small style="font-size:12px;opacity:0.75;">(Savatdagi kitoblar saqlanib qoladi)</small></p>
+    <p id="confirmText" style="text-align:center;margin-bottom:24px;font-size:15px;color:var(--text-color);line-height:1.5;">Hozirgi hisob-kitoblarni tozalaysizmi? <br><small style="font-size:12px;opacity:0.75;">(Savatdagi kitoblar saqlanib qoladi)</small></p>
     <div style="display:flex;gap:12px;">
-      <button onclick="confirmReset(true)" style="margin-top:0 !important;background:var(--primary-color);">Ha</button>
-      <button onclick="confirmReset(false)" style="margin-top:0 !important;background:rgba(0,0,0,0.06);color:var(--text-color);">Yo'q</button>
+      <button onclick="confirmDecision(true)" style="margin-top:0 !important;background:var(--primary-color);">Ha</button>
+      <button onclick="confirmDecision(false)" style="margin-top:0 !important;background:rgba(0,0,0,0.06);color:var(--text-color);">Yo'q</button>
     </div>
   </div>
 </div>
