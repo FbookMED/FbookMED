@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <h2>KITOB NARXI KALKULATORI</h2>
+    <h2>KITOB NARXI KALKULATORI (v20)</h2>
 
     <div class="f-field">
       <button class="select-button float-btn" id="tarifBtn" type="button" onclick="showModal('tarif')" aria-label="Tarif tanlash">
@@ -111,7 +111,7 @@
             <option>Oddiy muqovali</option>
             <option>Muqovasiz</option>
           </select>
-          <input type="hidden" id="qismSoni" value="1">
+          <input type="hidden" id="qismSoniHidden" value="1">
         </div>
       </div>
 
@@ -191,6 +191,9 @@
         <button class="add-basket-btn" onclick="addToBasket()" id="addBasketBtn">
           <span>➕ Savatga</span>
         </button>
+        <button class="add-basket-btn order-now-btn" onclick="sendToTelegram()" id="directOrderBtn">
+          <span>🚀 Buyurtma</span>
+        </button>
       </div>
     </div>
 
@@ -222,7 +225,10 @@
   <div class="modal-content">
     <div class="modal-header">🕐 Oxirgi hisoblar</div>
     <div id="historyItems"></div>
-    <button onclick="document.getElementById('historyModal').style.display='none'" style="margin-top:18px;background:rgba(0,0,0,0.05);color:var(--text-color);">✕ Yopish</button>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button id="clearHistoryBtn" onclick="clearFullHistory()" style="margin-top:0 !important;background:rgba(255,0,0,0.06);color:#ff5252;display:none;font-weight:600;font-size:14px;border:1.5px solid #ff525220;">🗑 Tozalash</button>
+      <button onclick="document.getElementById('historyModal').style.display='none'" style="margin-top:0 !important;background:rgba(0,0,0,0.05);color:var(--text-color);flex:1;">✕ Yopish</button>
+    </div>
   </div>
 </div>
 
@@ -340,6 +346,6 @@
 </div></div>
 
 
-<script src="script.js?v=13"></script>
+<script src="script_v20.js"></script>
 </body>
 </html>
