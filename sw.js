@@ -5,6 +5,7 @@ const ASSETS = [
   './style.css',
   './script_v20.js',
   './manifest.json',
+  './logo.png',
   'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap',
   'https://html2canvas.hertzen.com/dist/html2canvas.min.js'
 ];
