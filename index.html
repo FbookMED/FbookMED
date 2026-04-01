@@ -46,7 +46,7 @@
         <span class="btn-icon">📋</span>
         <span class="float-label">Tarif * </span>
         <span class="float-value" id="tarifValue"></span>
-        <span class="help">?</span>
+        <span class="help" onclick="showHelp('tarif', event)">?</span>
       </button>
       <select id="tarif" onchange="korsatmaChiqar()" style="display:none;">
         <option disabled selected value=""></option>
@@ -64,6 +64,7 @@
             <span class="btn-icon">📏</span>
             <span class="float-label">Format *</span>
             <span class="float-value" id="formatValue"></span>
+            <span class="help" onclick="showHelp('format', event)">?</span>
           </button>
           <select id="format" style="display:none;">
             <option disabled selected value=""></option>
@@ -188,10 +189,10 @@
       <div class="price-right">
         <div class="value" id="priceValue">—</div>
         <div class="price-per" id="pricePerBook"></div>
-        <button class="add-basket-btn" onclick="addToBasket()" id="addBasketBtn">
+        <button class="add-basket-btn" onclick="addToBasket()" id="addBasketBtn" disabled>
           <span>➕ Savatga</span>
         </button>
-        <button class="add-basket-btn order-now-btn" onclick="sendToTelegram()" id="directOrderBtn">
+        <button class="add-basket-btn order-now-btn" onclick="sendToTelegram()" id="directOrderBtn" disabled>
           <span>🚀 Buyurtma</span>
         </button>
       </div>
@@ -246,10 +247,14 @@
       <button class="action-btn telegram-btn" onclick="sendBasketToTelegram()" id="basketOrderBtn" style="display:none;display:flex;align-items:center;justify-content:center;gap:8px;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.565 8.161l-1.921 9.043c-.14.629-.513.784-1.037.49l-2.923-2.155-1.411 1.357c-.156.156-.289.289-.59.289l.21-2.977 5.418-4.897c.235-.211-.051-.326-.366-.118l-6.69 4.214-2.887-.902c-.628-.195-.64-.629.13-.93l11.282-4.352c.523-.195.98.118.729.753z"/></svg> Buyurtma berish
       </button>
-      <button class="clear-basket-btn" onclick="clearFullBasket()" id="clearBasketBtn" style="display:none;">
-        🗑️ Savatni bo'shatish
-      </button>
-      <button onclick="document.getElementById('basketModal').style.display='none'" style="margin-top:10px;background:rgba(0,0,0,0.05);color:var(--text-color);">✕ Yopish</button>
+      <div class="basket-footer-buttons">
+        <button class="clear-basket-btn" onclick="clearFullBasket()" id="clearBasketBtn" style="display:none;">
+          🗑️ Tozalash
+        </button>
+        <button class="close-basket-btn" onclick="document.getElementById('basketModal').style.display='none'">
+          ✕ Yopish
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -310,6 +315,18 @@
     <p style="text-align:center;margin:15px 0;font-size:15px;color:var(--text-color);line-height:1.5;" id="alertText">Iltimos, avval barcha maydonlarni to'ldiring!</p>
     <div style="display:flex;justify-content:center;">
        <button onclick="closeAlert()" style="margin-top:10px;background:rgba(0,0,0,0.05);color:var(--text-color);width:100% !important;">Tushunarli</button>
+    </div>
+  </div>
+</div>
+
+<!-- Help Modal (Yordam) -->
+<div class="modal" id="helpModal">
+  <div class="modal-overlay" onclick="document.getElementById('helpModal').style.display='none'"></div>
+  <div class="modal-content">
+    <div class="modal-header" id="helpTitle">Yordam ℹ️</div>
+    <div id="helpBody" style="text-align:left;margin:15px 0;font-size:14px;color:var(--text-color);line-height:1.6;"></div>
+    <div style="display:flex;justify-content:center;">
+       <button onclick="document.getElementById('helpModal').style.display='none'" style="margin-top:10px;background:var(--primary-color);color:white;width:100% !important;">Tushunarli</button>
     </div>
   </div>
 </div>

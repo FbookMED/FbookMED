@@ -317,7 +317,17 @@ input[type="number"]:focus {
   font-weight: 900;
   font-size: 13px;
   opacity: 0.5;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: help;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+.float-btn .help:hover {
+  opacity: 1;
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  transform: translateY(-50%) scale(1.1);
 }
 
 /* Sahifa soni — float input */
@@ -430,6 +440,24 @@ input[type="number"]:focus {
   color: #fff !important;
   border-color: #2e7d32 !important;
 }
+
+/* Disabled holati uchun */
+.add-basket-btn:disabled, .add-basket-btn:disabled:hover {
+  background: #cbd5e1 !important;
+  color: #64748b !important;
+  border-color: #94a3b8 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.7;
+}
+
+body.dark .add-basket-btn:disabled {
+  background: #334155 !important;
+  color: #94a3b8 !important;
+  border-color: #475569 !important;
+}
+
 .add-basket-btn.pulse-once {
   animation: btnSuccess 0.5s ease;
 }
@@ -989,11 +1017,28 @@ input[type="number"]:focus {
   flex: 1;
   min-width: 0;
 }
+.basket-item-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 122, 204, 0.2);
+}
+
 .basket-item-title {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14.5px;
   color: var(--text-color);
-  display: block;
+  display: flex;
+  align-items: center;
   word-break: break-all;
 }
 .basket-item-subtitle {
@@ -1053,22 +1098,44 @@ input[type="number"]:focus {
   font-size: 20px;
   color: var(--primary-color);
 }
-.clear-basket-btn {
-  width: 100%;
-  margin-top: 15px;
-  background: transparent;
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  padding: 10px;
-  border-radius: 12px;
-  font-size: 13px;
+.basket-footer-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.basket-footer-buttons button {
+  flex: 1;
+  margin-top: 0 !important;
+  font-size: 13.5px !important;
+  padding: 11px !important;
   font-weight: 700;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
+.clear-basket-btn {
+  background: rgba(239, 68, 68, 0.05) !important;
+  color: #ef4444 !important;
+  border: 1.5px solid rgba(239, 68, 68, 0.1) !important;
+}
 .clear-basket-btn:hover {
-  background: rgba(239, 68, 68, 0.05);
-  border-color: #ef4444;
+  background: #ef4444 !important;
+  color: white !important;
+  border-color: #ef4444 !important;
+}
+.close-basket-btn {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--text-color) !important;
+  border: 1.5px solid var(--glass-border) !important;
+}
+.close-basket-btn:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+  transform: scale(1.02);
+}
+
+body.dark .close-basket-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 @keyframes fadeInUp {

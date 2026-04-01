@@ -69,31 +69,11 @@ function addToBasket() {
       btn.innerHTML = originalText;
       
       // Sahifa sonini tozalash va narxni reset qilish
-      // Sahifa sonini tozalash olib tashlandi
-      const kitobNomiInput = document.getElementById('kitobNomi');
-      if (kitobNomiInput) kitobNomiInput.value = "";
-      
-      const kitobSoni = document.getElementById('kitobSoni');
-      if (kitobSoni) kitobSoni.value = "1";
-
-      const qismSoni = document.getElementById('qismSoniHidden');
-      const qismDisplay = document.getElementById('qismSoniDisplay');
-      if (qismSoni) qismSoni.value = "1";
-      if (qismDisplay) qismDisplay.textContent = "1";
-
-      updatePrice(); // Bannerda "—" ko'rsatadi va barchasini yangilaydi
+      // Barchasini tozalash (yangi mantiq)
+      doResetCalculator(false);
     }, 1500);
   } else {
-    // Agar tugma topilmasa ham sahifa sonini tozalash olib tashlandi
-    
-    const kitobSoni = document.getElementById('kitobSoni');
-    if (kitobSoni) kitobSoni.value = "1";
-
-    const qismSoni = document.getElementById('qismSoniHidden');
-    if (qismSoni) qismSoni.value = "1";
-    document.getElementById('qismSoniDisplay').textContent = "1";
-
-    updatePrice();
+    doResetCalculator(false);
   }
 }
 
@@ -152,12 +132,13 @@ function renderBasket() {
 
     const qismText = item.qismSoni > 1 ? ` (${item.qismSoni} qism)` : '';
 
-    const titleText = item.kitobNomi ? `${index + 1}. ${item.kitobNomi}` : `${index + 1}-Kitob`;
+    const indexBadge = `<span class="basket-item-index">${index + 1}</span>`;
+    const titleText = item.kitobNomi ? item.kitobNomi : `Kitob`;
     const subtitleText = `${item.tarif}, ${item.format}, ${item.muqova}${qismText}, ${item.rang}, ${item.sahifa} bet, ${item.kitobSoni} ta kitob`;
 
     div.innerHTML = `
       <div class="basket-item-info">
-        <span class="basket-item-title">${titleText}</span>
+        <span class="basket-item-title">${indexBadge} ${titleText}</span>
         <span class="basket-item-subtitle">${subtitleText}</span>
       </div>
       <div class="basket-item-price">${item.price}</div>
@@ -209,6 +190,16 @@ function doSendBasketToTelegram(phone) {
 
   const url = `https://t.me/FbookMED1?text=${encodeURIComponent(text)}`;
   window.open(url, '_blank');
+
+  // Savat va formani tozalash
+  setTimeout(() => {
+    basket = [];
+    localStorage.removeItem('calcBasket');
+    renderBasket();
+    updateBasketBadge();
+    doResetCalculator(false);
+    document.getElementById('basketModal').style.display = 'none';
+  }, 1000);
 }
 
 function clearFullHistory() {
@@ -329,6 +320,70 @@ const standartMuqovaYangi = {
   "Oddiy muqovali": { "A4": 5000, "A5": 3000, "B5": 5000 },
   "Muqovasiz": { "A4": 0, "A5": 0, "B5": 0 }
 };
+
+const helpTexts = {
+  "tarif": `<b>📚 Tariflar bo'yicha tushuntirish:</b><br><br>
+            • <b>Standart:</b> Kam miqdordagi (donalik) buyurtmalar uchun mo'ljallangan.<br>
+            • <b>Maxsus:</b> 50 tadan ortiq buyurtmalar uchun chegirmali narx.<br>
+            • <b>Optom:</b> 100 tadan ortiq buyurtmalar uchun eng arzon (ulgurji) narx.`,
+  "format": `<b>📏 Formatlar bo'yicha tushuntirish:</b><br><br>
+             • <b>A4:</b> Katta o'lcham (210x297 mm) — jurnallar yoki darsliklar uchun.<br>
+             • <b>A5:</b> Standart kitob o'lchami (148x210 mm) — badiiy kitoblar uchun eng ommabop.<br>
+             • <b>B5:</b> O'rtacha o'lcham (176x250 mm) — ilmiy adabiyotlar uchun qulay.`
+};
+
+function showHelp(type, event) {
+  if (event) event.stopPropagation();
+  const titleEl = document.getElementById('helpTitle');
+  const bodyEl = document.getElementById('helpBody');
+  const modal = document.getElementById('helpModal');
+  
+  if (helpTexts[type]) {
+    titleEl.innerHTML = type === 'tarif' ? "Tariflar haqida 📋" : "Formatlar haqida 📏";
+    bodyEl.innerHTML = helpTexts[type];
+    modal.style.display = 'flex';
+  }
+}
+
+function calculatePrice(opts) {
+  const { tarif, format, muqova, rang, sahifa, kitobSoni, qismSoni } = opts;
+  
+  const sahifaNarxi = tarifNarxlar?.[tarif]?.[format]?.[rang];
+  let muqovaNarxiBitta = tarifNarxlar?.[tarif]?.[format]?.muqova?.[muqova];
+
+  if (tarif === "Standart" && qismSoni >= 2) {
+    if (standartMuqovaYangi[muqova] && standartMuqovaYangi[muqova][format] !== undefined) {
+      muqovaNarxiBitta = standartMuqovaYangi[muqova][format];
+    }
+  }
+
+  if (typeof sahifaNarxi !== "number" || typeof muqovaNarxiBitta !== "number") return null;
+
+  const muqovaNarxi = muqovaNarxiBitta * qismSoni;
+  const bitta = sahifa * sahifaNarxi + muqovaNarxi;
+  const bittaYaxlit = yaxlit1000(bitta);
+  const jamiYaxlit = bittaYaxlit * kitobSoni;
+
+  return { bittaYaxlit, jamiYaxlit };
+}
+
+function validateForm() {
+  const tarif = document.getElementById('tarif').value;
+  const format = document.getElementById('format').value;
+  const muqova = document.getElementById('muqova').value;
+  const rang = document.getElementById('rang').value;
+  const sahifa = parseInt(document.getElementById('sahifa').value || 0);
+
+  const isValid = tarif && format && muqova && rang && sahifa > 0;
+  
+  const btnBasket = document.getElementById('addBasketBtn');
+  const btnOrder = document.getElementById('directOrderBtn');
+  const btnSave = document.querySelector('.save-btn');
+
+  if (btnBasket) btnBasket.disabled = !isValid;
+  if (btnOrder) btnOrder.disabled = !isValid;
+  // Rasmni saqlash tugmasini ham isValid bo'lsa enabled qilamiz
+}
 
 
 function korsatmaChiqar() {
@@ -500,7 +555,7 @@ function confirmDecision(approved) {
   }
 }
 
-function doResetCalculator() {
+function doResetCalculator(showToastFlag = true) {
   // Inputlarni tozalash
   const ids = ['tarif', 'format', 'muqova', 'rang'];
   ids.forEach(id => {
@@ -527,13 +582,19 @@ function doResetCalculator() {
   if (izoh) izoh.innerText = "";
 
   const qogoz = document.getElementById('qogoz');
-  if (qogoz) qogoz.innerText = "";
+  if (qogoz) {
+    qogoz.innerText = "";
+    qogoz.style.display = 'none';
+  }
 
   const kitobNomi = document.getElementById('kitobNomi');
   if (kitobNomi) kitobNomi.value = "";
 
+  // Standart tarifni qayta o'rnatish
+  selectOption('tarif', 'Standart');
+
   updatePrice();
-  showToast("🔄 Tozalandi");
+  if (showToastFlag) showToast("🔄 Tozalandi");
 }
 
 
@@ -566,6 +627,11 @@ function doSendToTelegram(phone) {
 
   const url = `https://t.me/FbookMED1?text=${encodeURIComponent(text)}`;
   window.open(url, '_blank');
+
+  // Avtomatik tozalash (Buyurtma bergandan so'ng)
+  setTimeout(() => {
+    doResetCalculator(false);
+  }, 1000);
 }
 
 
@@ -620,24 +686,15 @@ function updatePrice() {
   }
 
   // 3. Narxni hisoblash
-  const sahifaNarxi = tarifNarxlar?.[tarif]?.[format]?.[rang];
-  let muqovaNarxiBitta = tarifNarxlar?.[tarif]?.[format]?.muqova?.[muqova];
-
-  if (tarif === "Standart" && qismSoni >= 2) {
-    if (standartMuqovaYangi[muqova] && standartMuqovaYangi[muqova][format] !== undefined) {
-      muqovaNarxiBitta = standartMuqovaYangi[muqova][format];
-    }
-  }
-
-  if (typeof sahifaNarxi !== "number" || typeof muqovaNarxiBitta !== "number") {
+  const prices = calculatePrice({ tarif, format, muqova, rang, sahifa, kitobSoni, qismSoni });
+  
+  if (!prices) {
+    validateForm();
     setBanner('err', '—', "Tanlovlarda mos narx topilmadi.", 'Narx avtomatik hisoblanadi', '');
     return;
   }
 
-  const muqovaNarxi = muqovaNarxiBitta * qismSoni;
-  const bitta = sahifa * sahifaNarxi + muqovaNarxi;
-  const bittaYaxlit = yaxlit1000(bitta);
-  const jamiYaxlit = bittaYaxlit * kitobSoni;
+  const { bittaYaxlit, jamiYaxlit } = prices;
   const priceStr = `${jamiYaxlit.toLocaleString()} so'm`;
 
   // 4. Banner ma'lumotlarini tayyorlash
@@ -657,7 +714,7 @@ function updatePrice() {
   const hintText = "Natija doimiy yangilanadi";
   let bannerState = isWarning ? 'warn' : '';
   
-  // Tarif bo'yicha ogohlantirishlar (bu isWarning ni ustidan yozishi mumkin)
+  // Tarif bo'yicha ogohlantirishlar
   let specificHint = hintText;
   if (tarif === "Optom" && kitobSoni < 100) {
     bannerState = 'warn';
@@ -695,6 +752,7 @@ function updatePrice() {
     qogozInfo.style.display = extraHtml.trim() ? 'block' : 'none';
   }
 
+  validateForm();
   return { tarif, format, muqova, rang, sahifa, kitobSoni, qismSoni, price: priceStr, kitobNomi };
 }
 
@@ -747,12 +805,7 @@ async function saveAsImage() {
   const priceValue = document.getElementById('priceValue');
   const btn = document.querySelector('.save-btn');
   if (!priceValue || priceValue.textContent.trim() === '—') {
-    btn.textContent = '⚠️ Avval barcha maydonlarni to\'ldiring!';
-    btn.style.background = 'linear-gradient(135deg, #e53935, #ff5252)';
-    setTimeout(() => {
-      btn.innerHTML = '📸 Rasm saqlash';
-      btn.style.background = '';
-    }, 2000);
+    showAlert("Iltimos, avval barcha maydonlarni to'ldiring!");
     return;
   }
 
@@ -780,7 +833,7 @@ async function saveAsImage() {
     }, 2000);
   } catch (err) {
     console.error('Snapshot error:', err);
-    alert('Rasmni saqlashda xatolik yuz berdi.');
+    showAlert('Rasmni saqlashda xatolik yuz berdi.');
     btn.innerHTML = '📸 Rasm';
   }
 }
@@ -922,6 +975,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (valueEl) valueEl.textContent = val;
     }
   });
+
+  // Odatiy holatda "Standart" tarifini tanlab qo'yish
+  const tarifSel = document.getElementById('tarif');
+  if (tarifSel && tarifSel.value === "") {
+    selectOption('tarif', 'Standart');
+  }
 
   const sahifaEl = document.getElementById('sahifa');
   let historyTimer = null;
