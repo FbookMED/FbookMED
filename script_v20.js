@@ -10,10 +10,6 @@ function toggleDarkMode() {
   const isDark = document.body.classList.contains('dark');
   localStorage.setItem('darkMode', isDark);
   
-  // Eski ikonka (agar HTMLda qolgan bo'lsa)
-  const oldIcon = document.getElementById('darkModeIcon');
-  if (oldIcon) oldIcon.textContent = isDark ? '☀️' : '🌙';
-  
   // Menyu ichidagi ikonka
   const menuIcon = document.getElementById('darkModeIconMenu');
   if (menuIcon) menuIcon.textContent = isDark ? '☀️' : '🌙';
@@ -142,7 +138,6 @@ function addToBasket() {
   }
 }
 
-//removeFromBasket funksiyasi pastda (245-qatorda) index orqali ishlaydigan versiyasi qoldirildi.
 
 function clearFullBasket() {
   showConfirmModal("Savatdagi barcha kitoblarni o'chirib tashlaysizmi? <br><small style='font-size:12px;opacity:0.75;'>(Ushbu amalni ortga qaytarib bo'lmaydi)</small>", () => {
@@ -362,6 +357,22 @@ function restoreFromHistory(index) {
   showToast("🔄 Hisob qayta yuklandi");
 }
 
+function addFromHistoryToBasket(index) {
+  const history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
+  const item = history[index];
+  if (!item) return;
+
+  triggerHaptic();
+  
+  // Savat ob'yekti yaratish (Tarixdagi ma'lumotlar asosida)
+  const basketItem = { ...item, id: Date.now() };
+  basket.push(basketItem);
+  localStorage.setItem('calcBasket', JSON.stringify(basket));
+  
+  updateBasketBadge();
+  showToast("✅ Savatga qayta qo'shildi!");
+}
+
 function renderHistory() {
   const container = document.getElementById('historyItems');
   const clearBtn = document.getElementById('clearHistoryBtn');
@@ -393,9 +404,14 @@ function renderHistory() {
       </div>
       <div class="history-actions">
         <div class="history-price">${item.price}</div>
-        <button class="restore-history-btn" onclick="restoreFromHistory(${index})" title="Qayta yuklash">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-        </button>
+        <div class="history-btns-row">
+          <button class="restore-history-btn" onclick="restoreFromHistory(${index})" title="Qayta yuklash">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          </button>
+          <button class="add-again-history-btn" onclick="addFromHistoryToBasket(${index})" title="Savatga qo'shish">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
       </div>
     `;
     container.appendChild(div);
@@ -1184,7 +1200,6 @@ function editProfile() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Restore Dark Mode
   if (localStorage.getItem('darkMode') === 'true') {
     document.body.classList.add('dark');
     const menuIcon = document.getElementById('darkModeIconMenu');
@@ -1195,8 +1210,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('SW Registered'))
-        .catch(err => console.log('SW Failed', err));
+        .catch(err => { /* SW failed */ });
     });
   }
 
