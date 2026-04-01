@@ -1543,8 +1543,14 @@ body.dark .muqova-wrapper.filled {
   font-weight: 800;
   font-size: 14px;
   color: var(--primary-color);
-  margin-left: 10px;
   white-space: nowrap;
+}
+.basket-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  margin-right: 15px;
 }
 .remove-basket-item {
   background: rgba(239, 68, 68, 0.1) !important;
@@ -1936,8 +1942,37 @@ footer .brand {
     gap: 10px !important;
   }
   .basket-item {
-    margin-bottom: 10px !important;
-    padding: 14px !important;
+    margin-bottom: 15px !important;
+    padding: 16px 14px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    position: relative !important;
+  }
+  .basket-item-info {
+    width: 100% !important;
+    padding-right: 35px !important; /* X tugmasi uchun joy */
+  }
+  .basket-item-title {
+    font-size: 15.5px !important;
+    line-height: 1.3 !important;
+  }
+  .basket-item-actions {
+    width: 100% !important;
+    margin: 0 !important;
+    padding-top: 10px !important;
+    border-top: 1px solid var(--glass-border) !important;
+    justify-content: space-between !important;
+  }
+  .remove-basket-item {
+    position: absolute !important;
+    top: 14px !important;
+    right: 12px !important;
+    margin: 0 !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+  }
+  .basket-item-qty-controls {
+    margin-left: 0 !important;
   }
 }
 

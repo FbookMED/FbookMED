@@ -142,12 +142,7 @@ function addToBasket() {
   }
 }
 
-function removeFromBasket(id) {
-  basket = basket.filter(item => item.id !== id);
-  localStorage.setItem('calcBasket', JSON.stringify(basket));
-  renderBasket();
-  updateBasketBadge();
-}
+//removeFromBasket funksiyasi pastda (245-qatorda) index orqali ishlaydigan versiyasi qoldirildi.
 
 function clearFullBasket() {
   showConfirmModal("Savatdagi barcha kitoblarni o'chirib tashlaysizmi? <br><small style='font-size:12px;opacity:0.75;'>(Ushbu amalni ortga qaytarib bo'lmaydi)</small>", () => {
@@ -209,12 +204,14 @@ function renderBasket() {
         <span class="basket-item-title">${indexBadge} ${titleText}</span>
         <span class="basket-item-subtitle">${subtitleText}</span>
       </div>
-      <div class="basket-item-qty-controls">
-        <button class="qty-btn" onclick="changeBasketQuantity(${index}, -1)">-</button>
-        <span class="qty-value">${itemQty}</span>
-        <button class="qty-btn" onclick="changeBasketQuantity(${index}, 1)">+</button>
+      <div class="basket-item-actions">
+        <div class="basket-item-qty-controls">
+          <button class="qty-btn" onclick="changeBasketQuantity(${index}, -1)">-</button>
+          <span class="qty-value">${itemQty}</span>
+          <button class="qty-btn" onclick="changeBasketQuantity(${index}, 1)">+</button>
+        </div>
+        <div class="basket-item-price">${itemTotal.toLocaleString()} s.</div>
       </div>
-      <div class="basket-item-price">${itemTotal.toLocaleString()} s.</div>
       <button class="remove-basket-item" onclick="removeFromBasket(${index})" title="O'chirish">×</button>
     `;
     container.appendChild(div);
@@ -510,7 +507,8 @@ function korsatmaChiqar() {
 function yaxlit1000(n) {
   const rem = n % 1000;
   if (rem === 0) return n;
-  return rem > 550 ? (n + (1000 - rem)) : (n - rem);
+  // Agar qoldiq 500 dan katta yoki teng bo'lsa, yuqoriga, aks holda pastga yaxlitlaymiz
+  return rem >= 500 ? (n + (1000 - rem)) : (n - rem);
 }
 
 // Kitob soni +/- tugmalari
@@ -1189,10 +1187,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Restore Dark Mode
   if (localStorage.getItem('darkMode') === 'true') {
     document.body.classList.add('dark');
-    const oldIcon = document.getElementById('darkModeIcon');
-    if (oldIcon) oldIcon.textContent = '☀️';
     const menuIcon = document.getElementById('darkModeIconMenu');
     if (menuIcon) menuIcon.textContent = '☀️';
+  }
+
+  // Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('SW Registered'))
+        .catch(err => console.log('SW Failed', err));
+    });
   }
 
   korsatmaChiqar();
