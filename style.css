@@ -2000,7 +2000,7 @@ footer .brand {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }  /* Modallardagi tugmalarni 2-ta ustunga joylash (Grid) - Ma'lumot beruvchi modallarni istisno qilamiz */
-  .modal:not(#historyModal):not(#basketModal):not(#phoneModal):not(#cabinetModal):not(#helpModal):not(#profileModal):not(#alertModal):not(#confirmModal) .modal-content {
+  .modal:not(#historyModal):not(#basketModal):not(#phoneModal):not(#cabinetModal):not(#helpModal):not(#profileModal):not(#alertModal):not(#confirmModal):not(#addressModal) .modal-content {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
@@ -2092,6 +2092,78 @@ footer .brand {
   .basket-item-qty-controls {
     margin-left: 0 !important;
   }
+}
+
+/* Manzil Sahifasi (SPA View) Optimallashtirish */
+#addressView .view-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  padding: 0 5px !important; /* View-container ichidagi ichki padding */
+}
+
+.address-photo-wrap {
+  width: 100% !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  box-shadow: var(--shadow-sm);
+  background: #eee;
+  aspect-ratio: 4 / 3;
+}
+
+.address-photo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.address-details-card {
+  background: rgba(0, 122, 204, 0.05);
+  padding: 16px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(0, 122, 204, 0.1);
+}
+
+.address-text {
+  font-size: 15px !important;
+  margin-bottom: 8px !important;
+}
+
+.address-hint {
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+  color: var(--subtext-color);
+}
+
+.map-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  margin-top: 5px !important;
+}
+
+.map-btn {
+  padding: 14px 10px !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
+  transition: transform 0.2s;
+}
+.map-btn:active { transform: scale(0.96); }
+
+.map-btn.yandex {
+  background: #ffcc00 !important;
+  color: #000 !important;
+}
+.map-btn.google {
+  background: #fff !important;
+  border: 1.5px solid #eee !important;
+  color: #4285F4 !important;
 }
 
 /* Glow Background Animatsiyasi (Dinamik ranglar) */

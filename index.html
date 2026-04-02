@@ -295,9 +295,43 @@
           <span>📜</span> Hisob-kitoblar tarixi
         </button>
         
-        <button class="menu-item" onclick="showModal('address')">
+        <button class="menu-item" onclick="navigateTo('address')">
           <span>📍</span> Manzilimiz
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Address View -->
+  <div id="addressView" class="app-view">
+    <div class="container view-container">
+      <div class="view-header">
+        <button class="back-btn" onclick="navigateTo('cabinet')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </button>
+        <h2>Manzilimiz 📍</h2>
+      </div>
+      
+      <div class="address-photo-wrap">
+        <img src="manzil.jpg" alt="Bino ko'rinishi" class="address-photo">
+      </div>
+
+      <div class="address-details-card">
+        <div class="address-text">
+          <strong>Manzil:</strong> ToshGRES mavzesi, 1
+        </div>
+        <div class="address-hint">
+          <strong>Mo'ljal:</strong> Sampi-Selxoz chorrahasi yaqinida, Havas qarama qarshi tomonida.
+        </div>
+      </div>
+
+      <div class="map-actions">
+        <a href="https://yandex.uz/maps/-/CPbwZ0on" target="_blank" class="map-btn yandex">
+          <span>📍</span> Yandex Maps
+        </a>
+        <a href="https://maps.app.goo.gl/u48SKtFrica5jKXS9" target="_blank" class="map-btn google">
+          <span>🗺️</span> Google Maps
+        </a>
       </div>
     </div>
   </div>
@@ -468,39 +502,6 @@
     <button onclick="selectOption('rang','Rangli')">Rangli</button>
     <div class="modal-footer" style="margin-top: 10px;">
       <button class="close-btn" onclick="closeModal('rang')" style="background:rgba(0,0,0,0.06); color:var(--text-color);">Yopish</button>
-    </div>
-  </div>
-</div>
-<!-- Address Modal -->
-<div class="modal" id="addressModal">
-  <div class="modal-overlay" onclick="closeModal('address')"></div>
-  <div class="modal-content">
-    <div class="modal-header">Manzilimiz 📍</div>
-    
-    <div class="address-photo-wrap">
-      <img src="manzil.jpg" alt="Bino ko'rinishi" class="address-photo">
-    </div>
-
-    <div class="address-details-card">
-      <div class="address-text">
-        <strong>Manzil:</strong> ToshGRES mavzesi, 1
-      </div>
-      <div class="address-hint">
-        <strong>Mo'ljal:</strong> Sampi-Selxoz chorrahasi yaqinida, Havas qarama qarshi tomonida.
-      </div>
-    </div>
-
-    <div class="map-actions">
-      <a href="https://yandex.uz/maps/-/CPbwZ0on" target="_blank" class="map-btn yandex">
-        <span>📍</span> Yandex Maps
-      </a>
-      <a href="https://maps.app.goo.gl/u48SKtFrica5jKXS9" target="_blank" class="map-btn google">
-        <span>🗺️</span> Google Maps
-      </a>
-    </div>
-
-    <div class="modal-footer">
-      <button class="close-btn" onclick="closeModal('address')" style="background:rgba(0,0,0,0.06); color:var(--text-color);">Yopish</button>
     </div>
   </div>
 </div>
