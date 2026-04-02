@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fbookmed-v1';
+const CACHE_NAME = 'fbookmed-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS = [
   './script_v20.js',
   './manifest.json',
   './logo.png',
+  './manzil.jpg',
   'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap',
   'https://html2canvas.hertzen.com/dist/html2canvas.min.js'
 ];

@@ -4,6 +4,27 @@ function triggerHaptic() {
   }
 }
 
+// --- Global O'zgaruvchilar va Xavfsiz Storage ---
+function getStorage(key, defaultVal = []) {
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultVal;
+  } catch (e) {
+    console.error("Storage error:", e);
+    return defaultVal;
+  }
+}
+
+function setStorage(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch (e) {
+    console.error("Storage save error:", e);
+  }
+}
+
+let basket = getStorage('calcBasket', []);
+
 // Dark Mode logic
 function toggleDarkMode() {
   document.body.classList.toggle('dark');
@@ -67,7 +88,7 @@ function navigateTo(viewId) {
 }
 
 function saveToHistory(data) {
-  let history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
+  let history = getStorage('calcHistory', []);
 
   // Agar oxirgi yozuv bir xil tanlovlarga ega bo'lsa (faqat sahifa farq qilsa),
   // uni yangi qiymat bilan ALMASHTIR (yangi yozuv qo'shma)
@@ -81,14 +102,14 @@ function saveToHistory(data) {
     history[0] = { ...data, date: history[0].date }; // sanani saqlab qoldik
   } else {
     history.unshift({ ...data, date: new Date().toLocaleString() });
-    if (history.length > 5) history = history.slice(0, 5); // Faqat oxirgi 5 ta
+    if (history.length > 10) history = history.slice(0, 10); // Professional limit: 10 ta
   }
 
-  localStorage.setItem('calcHistory', JSON.stringify(history));
+  setStorage('calcHistory', history);
   renderHistory();
 }
 
-let basket = JSON.parse(localStorage.getItem('calcBasket') || '[]');
+// basket tepada init bo'ldi
 
 function updateBasketBadge() {
   const badgeNav = document.getElementById('navBasketBadge');
@@ -145,6 +166,7 @@ function clearFullBasket() {
     localStorage.removeItem('calcBasket');
     renderBasket();
     updateBasketBadge();
+    showToast("🗑 Savat bo'shatildi");
     navigateTo('calculator');
   });
 }
@@ -180,12 +202,18 @@ function renderBasket() {
   container.innerHTML = '';
   let totalSum = 0;
 
-  basket.forEach((item, index) => {
-    // Har bir element uchun narxni hisoblash (item.price - string "123,000 so'm")
-    const priceNum = parseInt(item.price.replace(/[^0-9]/g, ''), 10);
-    const itemQty = item.kitobSoni || 1;
-    const itemTotal = priceNum * itemQty;
-    totalSum += itemTotal;
+    basket.forEach((item, index) => {
+      const itemQty = item.kitobSoni || 1;
+      let itemTotal = 0;
+      
+      if (item.totalPrice) {
+        itemTotal = item.totalPrice;
+      } else {
+        const priceNum = parseInt(item.price.replace(/[^0-9]/g, ''), 10);
+        itemTotal = priceNum;
+      }
+      
+      totalSum += itemTotal;
 
     const qismText = item.qismSoni > 1 ? ` (${item.qismSoni} qism)` : '';
     const indexBadge = `<span class="basket-item-index">${index + 1}</span>`;
@@ -229,6 +257,21 @@ function changeBasketQuantity(index, delta) {
     if (newVal < 1) newVal = 1;
     if (newVal > 1000) newVal = 1000;
     basket[index].kitobSoni = newVal;
+    
+    // Narxni qayta hisoblash
+    if (basket[index].unitPrice) {
+      basket[index].totalPrice = basket[index].unitPrice * newVal;
+      basket[index].price = basket[index].totalPrice.toLocaleString() + " so'm";
+    } else {
+      // Eski ma'lumotlar uchun
+      const oldQty = current;
+      const totalNum = parseInt(basket[index].price.replace(/[^0-9]/g, ''), 10);
+      const unit = Math.round(totalNum / oldQty);
+      basket[index].unitPrice = unit;
+      basket[index].totalPrice = unit * newVal;
+      basket[index].price = basket[index].totalPrice.toLocaleString() + " so'm";
+    }
+
     localStorage.setItem('calcBasket', JSON.stringify(basket));
     renderBasket();
   }
@@ -268,10 +311,12 @@ function doSendBasketToTelegram(phone) {
   }
   text += `\n`;
   let totalSum = 0;
-
   basket.forEach((item, index) => {
-    const priceNum = parseInt(item.price.replace(/[^0-9]/g, ''), 10);
-    totalSum += priceNum;
+
+    const itemQty = item.kitobSoni || 1;
+    const unitPrice = item.unitPrice || Math.round(parseInt(item.price.replace(/[^0-9]/g, ''), 10) / itemQty);
+    const totalPrice = unitPrice * itemQty;
+    totalSum += totalPrice;
 
     const qismText = item.qismSoni > 1 ? ` (${item.qismSoni} qism)` : '';
     const titleStr = item.kitobNomi ? `*${item.kitobNomi}*` : `*${index + 1}-Kitob*`;
@@ -279,8 +324,8 @@ function doSendBasketToTelegram(phone) {
     text += `${index + 1}. ${titleStr}\n` +
             `   ✨ Tarif: *${item.tarif}*\n` +
             `   📐 *${item.format}*, *${item.muqova}*${qismText}, *${item.rang}*\n` +
-            `   📄 *${item.sahifa} bet*, *${item.kitobSoni} ta kitob*\n` +
-            `   💸 Narxi: *${item.price}*\n\n`;
+            `   📄 *${item.sahifa} bet*, *${itemQty} ta kitob*\n` +
+            `   💸 Narxi: ${unitPrice.toLocaleString()} * ${itemQty} = *${totalPrice.toLocaleString()} so'm*\n\n`;
   });
 
   text += `-------------------------\n` +
@@ -371,6 +416,15 @@ function addFromHistoryToBasket(index) {
   
   updateBasketBadge();
   showToast("✅ Savatga qayta qo'shildi!");
+  closeHistoryModal();
+}
+
+function removeFromHistory(index) {
+  const history = getStorage('calcHistory', []);
+  history.splice(index, 1);
+  setStorage('calcHistory', history);
+  renderHistory();
+  showToast("🗑 Tarixdan o'chirildi");
 }
 
 function renderHistory() {
@@ -394,8 +448,8 @@ function renderHistory() {
     div.className = 'history-item';
     
     const qism = item.qismSoni > 1 ? `, ${item.qismSoni} qism` : '';
-    const titleText = item.kitobNomi ? item.kitobNomi : `${item.format} Kitob`;
-    const subtitleText = `${item.tarif}, ${item.muqova}, ${item.rang}, ${item.sahifa} bet${qism}`;
+    const titleText = item.kitobNomi ? item.kitobNomi : `${index + 1}-Kitob`;
+    const subtitleText = `${item.tarif}, ${item.format}, ${item.muqova}, ${item.rang}, ${item.sahifa} bet${qism}`;
 
     div.innerHTML = `
       <div class="history-info">
@@ -410,6 +464,9 @@ function renderHistory() {
           </button>
           <button class="add-again-history-btn" onclick="addFromHistoryToBasket(${index})" title="Savatga qo'shish">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button class="remove-history-btn" onclick="removeFromHistory(${index})" title="O'chirish">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
           </button>
         </div>
       </div>
@@ -596,7 +653,15 @@ function setBanner(state, valueText, hintText, formulaText, perText) {
   if (perEl) perEl.textContent = perText || '';
 
   banner.classList.remove('success');
-  if (!state && valueText !== '—') banner.classList.add('success');
+  if (!state && valueText !== '—') {
+     banner.classList.add('success');
+     // Success flash effect
+     const vEl = document.getElementById('priceValue');
+     if (vEl) {
+       vEl.style.transform = 'scale(1.1)';
+       setTimeout(() => { vEl.style.transform = 'scale(1)'; }, 200);
+     }
+  }
 
   banner.style.animation = 'none';
   void banner.offsetWidth;
@@ -632,24 +697,39 @@ function animateNumber(element, target) {
 }
 
 function isCalculatorDirty() {
-  const ids = ['tarif', 'format', 'muqova', 'rang'];
+  const ids = ['format', 'muqova', 'rang'];
   for (let id of ids) {
     const el = document.getElementById(id);
     if (el && el.value !== "") return true;
   }
+  
+  const tarif = document.getElementById('tarif');
+  if (tarif && tarif.value !== "" && tarif.value !== "Standart") return true;
+
   const sahifa = document.getElementById('sahifa');
   if (sahifa && sahifa.value !== "") return true;
 
   const kitobNomi = document.getElementById('kitobNomi');
   if (kitobNomi && kitobNomi.value !== "") return true;
 
-  const kitobSoni = document.getElementById('kitobSoni');
-  if (kitobSoni && kitobSoni.value !== "1") return true;
+  const kitobSoniInput = document.getElementById('kitobSoni');
+  if (kitobSoniInput && kitobSoniInput.value !== "1") return true;
 
   const qismSoni = document.getElementById('qismSoniHidden');
   if (qismSoni && qismSoni.value !== "1") return true;
 
   return false;
+}
+
+function toggleClearBtnState() {
+  const btn = document.querySelector('.clear-btn');
+  if (!btn) return;
+  const isDirty = isCalculatorDirty();
+  if (isDirty) {
+    btn.classList.remove('disabled');
+  } else {
+    btn.classList.add('disabled');
+  }
 }
 
 function resetCalculator() {
@@ -765,7 +845,7 @@ function doSendToTelegram(phone) {
           `✨ Tarif: *${res.tarif}*\n` +
           `📐 *${res.format}*, *${res.muqova}*${qismText}, *${res.rang}*\n` +
           `📄 *${res.sahifa} bet*, *${res.kitobSoni} ta kitob*\n\n` +
-          `💰 *JAMI: ${res.price}*`;
+          `💸 Narxi: ${res.unitPrice.toLocaleString()} * ${res.kitobSoni} = *${res.totalPrice.toLocaleString()} so'm*`;
 
   const url = `https://t.me/FbookMED1?text=${encodeURIComponent(text)}`;
   window.open(url, '_blank');
@@ -793,12 +873,18 @@ function updatePrice() {
     sahifaInput.value = sahifaInput.value.replace(/[^0-9]/g, '');
   }
 
-  let sahifa = parseInt(sahifaInput ? sahifaInput.value : 0, 10);
+  let sahifaValue = parseInt(sahifaInput ? sahifaInput.value : 0, 10);
+  if (isNaN(sahifaValue) || sahifaValue < 1) sahifaValue = 0;
+  let sahifa = sahifaValue;
+
   if (sahifa > 10000) {
     sahifa = 10000;
     if (sahifaInput) sahifaInput.value = "10000";
   }
-  const kitobSoni = parseInt(kitobSoniInput ? kitobSoniInput.value : 1, 10) || 1;
+
+  let ksValue = parseInt(kitobSoniInput ? kitobSoniInput.value : 1, 10);
+  if (isNaN(ksValue) || ksValue < 1) ksValue = 1;
+  const kitobSoni = ksValue;
 
   const qismArea = document.querySelector('.qism-select-area');
   if (qismArea) {
@@ -895,7 +981,8 @@ function updatePrice() {
   }
 
   validateForm();
-  return { tarif, format, muqova, rang, sahifa, kitobSoni, qismSoni, price: priceStr, kitobNomi };
+  toggleClearBtnState();
+  return { tarif, format, muqova, rang, sahifa, kitobSoni, qismSoni, price: priceStr, unitPrice: bittaYaxlit, totalPrice: jamiYaxlit, kitobNomi };
 }
 
 function closeHistoryModal() {
@@ -973,9 +1060,11 @@ async function saveAsImage() {
   try {
     const canvas = await html2canvas(area, {
       scale: 2,
-      backgroundColor: getComputedStyle(document.body).backgroundColor,
-      useCORS: true
+      backgroundColor: "#f4f7f9",
+      useCORS: true,
+      logging: false
     });
+    
     const link = document.createElement('a');
     link.download = `FbookMED_Hisob_${new Date().getTime()}.png`;
     link.href = canvas.toDataURL('image/png');
@@ -984,10 +1073,10 @@ async function saveAsImage() {
     // Success feedback
     showToast('✅ Rasm muvaffaqiyatli saqlandi!');
     btn.innerHTML = '✅ Saqlandi';
-    btn.style.background = 'linear-gradient(135deg, #2e7d32, #4caf50)';
+    btn.classList.add('btn-success');
     setTimeout(() => {
       btn.innerHTML = '📸 Rasm';
-      btn.style.background = '';
+      btn.classList.remove('btn-success');
     }, 2000);
   } catch (err) {
     console.error('Snapshot error:', err);
@@ -997,7 +1086,7 @@ async function saveAsImage() {
 }
 
 window.onclick = function(event) {
-  ['tarif','format','muqova','rang','confirm','phone','alert'].forEach(type => {
+  ['tarif','format','muqova','rang','confirm','phone','alert','address'].forEach(type => {
     const modal = document.getElementById(type + 'Modal');
     if (modal && event.target === modal) modal.style.display = 'none';
   });
@@ -1243,13 +1332,29 @@ document.addEventListener('DOMContentLoaded', () => {
   let historyTimer = null;
   if (sahifaEl) {
     sahifaEl.addEventListener('input', () => {
-      updatePrice(); // Narxni darhol yangilaydi
-      // Tarixni esa 800ms kutib saqlaydi
+      updatePrice();
       clearTimeout(historyTimer);
       historyTimer = setTimeout(() => {
         const result = updatePrice();
         if (result) saveToHistory(result);
       }, 800);
+    });
+    // Auto-fix empty or 0 on blur
+    sahifaEl.addEventListener('blur', () => {
+      if (sahifaEl.value === "" || parseInt(sahifaEl.value) < 1) {
+        // if empty user might still be thinking, but let's keep it healthy
+      }
+      updatePrice();
+    });
+  }
+
+  const ksInputEl = document.getElementById('kitobSoni');
+  if (ksInputEl) {
+    ksInputEl.addEventListener('blur', () => {
+      if (ksInputEl.value === "" || parseInt(ksInputEl.value) < 1) {
+        ksInputEl.value = "1";
+        updatePrice();
+      }
     });
   }
 
@@ -1261,6 +1366,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const knEl = document.getElementById('kitobNomi');
+  if (knEl) {
+    knEl.addEventListener('input', () => {
+      clearTimeout(historyTimer);
+      historyTimer = setTimeout(() => {
+        const result = updatePrice();
+        if (result) saveToHistory(result);
+      }, 1000);
+    });
+  }
+
   // Oxirgi hisoblar modal: overlay div ga click qo'shish
   const histOverlay = document.querySelector('#historyModal .modal-overlay');
   if (histOverlay) {
@@ -1270,6 +1386,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   updatePrice();
+  toggleClearBtnState();
 });
 
 const messages = [
@@ -1296,7 +1413,7 @@ function rotateScrollingText() {
   }
   oldElem.replaceWith(newElem);
 }
-setInterval(rotateScrollingText, 10000);
+setInterval(rotateScrollingText, 20000);
 
 function showToast(message, duration = 2500) {
   const container = document.getElementById('toastContainer');

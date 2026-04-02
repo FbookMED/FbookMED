@@ -67,176 +67,184 @@
 
       <h2>KITOB NARXI KALKULATORI</h2>
 
-      <div class="f-field">
-        <button class="select-button float-btn" id="tarifBtn" type="button" onclick="showModal('tarif')" aria-label="Tarif tanlash">
-          <span class="btn-icon">📋</span>
-          <span class="float-label">Tarif * </span>
-          <span class="float-value" id="tarifValue"></span>
-          <span class="help" onclick="showHelp('tarif', event)">?</span>
-        </button>
-        <select id="tarif" onchange="korsatmaChiqar()" style="display:none;">
-          <option disabled selected value=""></option>
-          <option>Standart</option>
-          <option>Optom</option>
-          <option>Maxsus</option>
-        </select>
-      </div>
-      <div id="izoh"></div>
 
-      <div class="row">
-        <div>
-          <div class="f-field">
-            <button class="select-button float-btn" id="formatBtn" type="button" onclick="showModal('format')" aria-label="Format tanlash">
-              <span class="btn-icon">📏</span>
-              <span class="float-label">Format *</span>
-              <span class="float-value" id="formatValue"></span>
-              <span class="help" onclick="showHelp('format', event)">?</span>
+      <div class="calc-layout">
+        <div class="calc-main">
+          <div class="f-field" style="margin-top:0;">
+            <button class="select-button float-btn" id="tarifBtn" type="button" onclick="showModal('tarif')" aria-label="Tarif tanlash">
+              <span class="btn-icon">📋</span>
+              <span class="float-label">Tarif *</span>
+              <span class="float-value" id="tarifValue"></span>
+              <span class="help" onclick="showHelp('tarif', event)">?</span>
             </button>
-            <select id="format" style="display:none;">
+            <select id="tarif" onchange="korsatmaChiqar()" style="display:none;">
               <option disabled selected value=""></option>
-              <option>A4</option>
-              <option>A5</option>
-              <option>B5</option>
+              <option>Standart</option>
+              <option>Optom</option>
+              <option>Maxsus</option>
             </select>
           </div>
-        </div>
-          <div class="muqova-wrapper" id="muqovaWrapper">
-            <button class="select-button float-btn muqova-main-btn" id="muqovaBtn" type="button" onclick="showModal('muqova')" aria-label="Muqova tanlash">
-              <span class="btn-icon">📘</span>
-              <span class="float-label">Muqova *</span>
-              <span class="float-value" id="muqovaValue"></span>
-            </button>
-            <div class="qism-select-area" onclick="toggleQismDropdown(event)" title="Qism sonini tanlash">
-              <span class="qism-title">Qism</span>
-              <div class="qism-current-val">
-                <span id="qismSoniDisplay">1</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          <div id="izoh"></div>
+
+          <div class="row">
+            <div>
+              <div class="f-field">
+                <button class="select-button float-btn" id="formatBtn" type="button" onclick="showModal('format')" aria-label="Format tanlash">
+                  <span class="btn-icon">📏</span>
+                  <span class="float-label">Format *</span>
+                  <span class="float-value" id="formatValue"></span>
+                  <span class="help" onclick="showHelp('format', event)">?</span>
+                </button>
+                <select id="format" style="display:none;">
+                  <option disabled selected value=""></option>
+                  <option>A4</option>
+                  <option>A5</option>
+                  <option>B5</option>
+                </select>
               </div>
-              
-              <div class="qism-dropdown" id="qismDropdown" onclick="event.stopPropagation()">
-                <div class="qism-grid-mini">
-                  <button class="qism-num-btn" onclick="setQismSoni(1)">1</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(2)">2</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(3)">3</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(4)">4</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(5)">5</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(6)">6</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(7)">7</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(8)">8</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(9)">9</button>
-                  <button class="qism-num-btn" onclick="setQismSoni(10)">10</button>
+            </div>
+            <div class="muqova-wrapper" id="muqovaWrapper">
+              <button class="select-button float-btn muqova-main-btn" id="muqovaBtn" type="button" onclick="showModal('muqova')" aria-label="Muqova tanlash">
+                <span class="btn-icon">📘</span>
+                <span class="float-label">Muqova *</span>
+                <span class="float-value" id="muqovaValue"></span>
+              </button>
+              <div class="qism-select-area" onclick="toggleQismDropdown(event)" title="Qism sonini tanlash">
+                <span class="qism-title">Qism</span>
+                <div class="qism-current-val">
+                  <span id="qismSoniDisplay">1</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                
+                <div class="qism-dropdown" id="qismDropdown" onclick="event.stopPropagation()">
+                  <div class="qism-grid-mini">
+                    <button class="qism-num-btn" onclick="setQismSoni(1)">1</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(2)">2</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(3)">3</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(4)">4</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(5)">5</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(6)">6</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(7)">7</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(8)">8</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(9)">9</button>
+                    <button class="qism-num-btn" onclick="setQismSoni(10)">10</button>
+                  </div>
+                </div>
+              </div>
+              <select id="muqova" style="display:none;">
+                <option disabled selected value=""></option>
+                <option>Qattiq muqovali</option>
+                <option>Yumshoq muqovali</option>
+                <option>Simli pereplyot</option>
+                <option>Plastik pereplyot</option>
+                <option>Oddiy muqovali</option>
+                <option>Muqovasiz</option>
+              </select>
+              <input type="hidden" id="qismSoniHidden" value="1">
+            </div>
+          </div>
+  
+          <div class="row">
+            <div>
+              <div class="f-field">
+                <button class="select-button float-btn" id="rangBtn" type="button" onclick="showModal('rang')" aria-label="Rang tanlash">
+                  <span class="btn-icon">🎨</span>
+                  <span class="float-label">Rang *</span>
+                  <span class="float-value" id="rangValue"></span>
+                </button>
+                <select id="rang" style="display:none;">
+                  <option disabled selected value=""></option>
+                  <option>Oq qora</option>
+                  <option>Rangli</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <div class="f-field">
+                <div class="float-input-wrap">
+                  <input
+                    id="sahifa"
+                    class="select-button float-input"
+                    type="number"
+                    min="1"
+                    placeholder=" "
+                  />
+                  <span class="float-label">Sahifa soni *</span>
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
             </div>
-            <select id="muqova" style="display:none;">
-              <option disabled selected value=""></option>
-              <option>Qattiq muqovali</option>
-              <option>Yumshoq muqovali</option>
-              <option>Simli pereplyot</option>
-              <option>Plastik pereplyot</option>
-              <option>Oddiy muqovali</option>
-              <option>Muqovasiz</option>
-            </select>
-            <input type="hidden" id="qismSoniHidden" value="1">
           </div>
-        </div>
-
-
-      <div class="row">
-        <div>
-          <div class="f-field">
-            <button class="select-button float-btn" id="rangBtn" type="button" onclick="showModal('rang')" aria-label="Rang tanlash">
-              <span class="btn-icon">🎨</span>
-              <span class="float-label">Rang *</span>
-              <span class="float-value" id="rangValue"></span>
-            </button>
-            <select id="rang" style="display:none;">
-              <option disabled selected value=""></option>
-              <option>Oq qora</option>
-              <option>Rangli</option>
-            </select>
-          </div>
-        </div>
-        <div>
-        <div class="f-field">
-          <div class="float-input-wrap">
-            <input
-              id="sahifa"
-              class="select-button float-input"
-              type="number"
-              min="1"
-              placeholder=" "
-            />
-            <span class="float-label">Sahifa soni *</span>
-            <span class="input-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
-            </span>
-          </div>
-        </div>
-        </div>
-      </div>
-
-      <!-- Kitob nomi va soni -->
-      <div class="row">
-        <div>
-          <div class="f-field">
-            <div class="float-input-wrap">
-              <input id="kitobNomi" class="select-button float-input" type="text" placeholder=" " />
-              <span class="float-label">Kitob nomi (ixtiyoriy)</span>
-              <span class="input-icon">📝</span>
+  
+          <!-- Kitob nomi va soni -->
+          <div class="row">
+            <div>
+              <div class="f-field">
+                <div class="float-input-wrap">
+                  <input id="kitobNomi" class="select-button float-input" type="text" placeholder=" " />
+                  <span class="float-label">Kitob nomi (ixtiyoriy)</span>
+                  <span class="input-icon">📝</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div>
-          <div class="f-field">
-            <div class="kitob-soni-wrap small-counter">
-              <span class="kitob-label">📚 Soni:</span>
-              <div class="kitob-counter">
-                <button class="counter-btn" type="button" onclick="changeKitobSoni(-1)">−</button>
-                <input type="number" class="counter-value input-no-spinner" id="kitobSoni" value="1" min="1" max="9999" oninput="updatePrice()">
-                <button class="counter-btn" type="button" onclick="changeKitobSoni(1)">+</button>
+            <div>
+              <div class="f-field">
+                <div class="kitob-soni-wrap small-counter">
+                  <span class="kitob-label">📚 Soni:</span>
+                  <div class="kitob-counter">
+                    <button class="counter-btn" type="button" onclick="changeKitobSoni(-1)">−</button>
+                    <input type="number" class="counter-value input-no-spinner" id="kitobSoni" value="1" min="1" max="9999" oninput="updatePrice()">
+                    <button class="counter-btn" type="button" onclick="changeKitobSoni(1)">+</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+  
+          <div id="qogoz"></div>
         </div>
-      </div>
 
-      <div id="qogoz"></div>
-
-      <div id="priceBanner" class="price-banner">
-        <div class="left">
-          <div class="title" id="priceFormula">Narx avtomatik hisoblanadi</div>
-          <div class="hint" id="priceHint">Maydonlarni to'ldirsangiz natija chiqadi</div>
+        <div class="calc-sidebar">
+          <div id="priceBanner" class="price-banner">
+            <div class="left">
+              <div class="title" id="priceFormula">Narx avtomatik hisoblanadi</div>
+              <div class="hint" id="priceHint">Maydonlarni to'ldirsangiz natija chiqadi</div>
+            </div>
+            <div class="price-right">
+              <div class="value" id="priceValue">—</div>
+              <div class="price-per" id="pricePerBook"></div>
+              <div class="sidebar-add-actions">
+                <button class="add-basket-btn" onclick="addToBasket()" id="addBasketBtn" disabled>
+                  <span>➕ Savatga</span>
+                </button>
+                <button class="add-basket-btn order-now-btn" onclick="sendToTelegram()" id="directOrderBtn" disabled>
+                  <span>🚀 Buyurtma</span>
+                </button>
+              </div>
+            </div>
+          </div>
+  
+          <div class="action-row">
+            <button class="action-btn reset-btn" onclick="resetCalculator()" title="Tozalash">
+              🔄 Tozalash
+            </button>
+            <button class="action-btn save-btn" onclick="saveAsImage()" title="Rasm qilib saqlash">
+              📸 Rasm
+            </button>
+            <button class="action-btn history-btn" onclick="showHistoryModal()" title="Oxirgi hisoblar">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+                <path d="M12 7v5l4 2"/>
+              </svg>
+            </button>
+          </div>
         </div>
-        <div class="price-right">
-          <div class="value" id="priceValue">—</div>
-          <div class="price-per" id="pricePerBook"></div>
-          <button class="add-basket-btn" onclick="addToBasket()" id="addBasketBtn" disabled>
-            <span>➕ Savatga</span>
-          </button>
-          <button class="add-basket-btn order-now-btn" onclick="sendToTelegram()" id="directOrderBtn" disabled>
-            <span>🚀 Buyurtma</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="action-row">
-        <button class="action-btn reset-btn" onclick="resetCalculator()" title="Tozalash">
-          🔄 Tozalash
-        </button>
-        <button class="action-btn save-btn" onclick="saveAsImage()" title="Rasm qilib saqlash">
-          📸 Rasm
-        </button>
-        <button class="action-btn history-btn" onclick="showHistoryModal()" title="Oxirgi hisoblar">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
-            <path d="M12 7v5l4 2"/>
-          </svg>
-        </button>
       </div>
     </div>
   </div>
@@ -285,6 +293,10 @@
         
         <button class="menu-item" onclick="showHistoryModal()">
           <span>📜</span> Hisob-kitoblar tarixi
+        </button>
+        
+        <button class="menu-item" onclick="showModal('address')">
+          <span>📍</span> Manzilimiz
         </button>
       </div>
     </div>
@@ -459,6 +471,39 @@
     </div>
   </div>
 </div>
+<!-- Address Modal -->
+<div class="modal" id="addressModal">
+  <div class="modal-overlay" onclick="closeModal('address')"></div>
+  <div class="modal-content">
+    <div class="modal-header">Manzilimiz 📍</div>
+    
+    <div class="address-photo-wrap">
+      <img src="manzil.jpg" alt="Bino ko'rinishi" class="address-photo">
+    </div>
+
+    <div class="address-details-card">
+      <div class="address-text">
+        <strong>Manzil:</strong> ToshGRES mavzesi, 1
+      </div>
+      <div class="address-hint">
+        <strong>Mo'ljal:</strong> Sampi-Selxoz chorrahasi yaqinida, Havas qarama qarshi tomonida.
+      </div>
+    </div>
+
+    <div class="map-actions">
+      <a href="https://yandex.uz/maps/-/CPbwZ0on" target="_blank" class="map-btn yandex">
+        <span>📍</span> Yandex Maps
+      </a>
+      <a href="https://maps.app.goo.gl/u48SKtFrica5jKXS9" target="_blank" class="map-btn google">
+        <span>🗺️</span> Google Maps
+      </a>
+    </div>
+
+    <div class="modal-footer">
+      <button class="close-btn" onclick="closeModal('address')" style="background:rgba(0,0,0,0.06); color:var(--text-color);">Yopish</button>
+    </div>
+  </div>
+</div>
 
 
 <div class="bottom-nav">
@@ -481,6 +526,6 @@
 
 
   <div id="toastContainer" class="toast-container"></div>
-  <script src="script_v20.js?v=25"></script>
+  <script src="script_v20.js?v=26"></script>
 </body>
 </html>
